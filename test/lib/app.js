@@ -29,9 +29,8 @@ describe('App', function() {
   it('can load config', function() {
     const app = new App()
     expect(app.settings).to.be.an('object')
-    expect(app.settings).to.be.include({
-      blueprintsDirectory: '.blueprints'
-    })
+    expect(app.settings).to.have.property('globalBlueprintsPath')
+    expect(app.settings).to.have.property('projectBlueprintsPath')
   })
   it('can generate global blueprints', function() {
     const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-global')
@@ -46,7 +45,19 @@ describe('App', function() {
       .then(exists => expect(exists).to.eql(true))
       .catch(err => console.log(err))
   })
-  it.skip('can generate from project blueprints')
+  it('can generate from project blueprints', function() {
+    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
+    const app = new App()
+    setTestConfig(app)
+
+    app
+      .generateFromBlueprint('project-blueprint', BLUEPRINT_DEST)
+      .then(results => {
+        return fs.pathExists(BLUEPRINT_DEST)
+      })
+      .then(exists => expect(exists).to.eql(true))
+      .catch(err => console.log(err))
+  })
   it.skip('can replace blueprint template variables')
   it.skip('can rename files and directories')
 })
