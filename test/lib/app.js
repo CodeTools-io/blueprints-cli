@@ -2,13 +2,13 @@ const { expect } = require('chai')
 const App = require('../../lib/app')
 
 describe('App', function() {
-  it('can load global config', function() {
+  it('can load config', function() {
     const app = new App()
-
-    expect(app.settings.environment).to.eql('testGlobalConfig')
+    expect(app.settings).to.be.an('object')
+    expect(app.settings).to.be.include({
+      blueprintsDirectory: '.blueprints'
+    })
   })
-  it.skip('can load project config')
-  it.skip('can merge project config into global config')
   it.skip('can generate global blueprints')
   it.skip('can generate from project blueprints')
   it.skip('can replace blueprint template variables')
