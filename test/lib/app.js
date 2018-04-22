@@ -1,92 +1,90 @@
+const os = require('os')
 const path = require('path')
 
 const { expect } = require('chai')
 const fs = require('fs-extra')
-
 const App = require('../../lib/app')
-const DEST_DIR = path.resolve(__dirname, '../fixtures/tmp')
+
+const {
+  setConfig,
+  DEST_DIR,
+  GLOBAL_BLUEPRINT_DEST,
+  PROJECT_BLUEPRINT_DEST
+} = require('../helpers')
+
+let app = null
 
 beforeEach(function() {
+  app = new App()
+  setConfig(app)
   return fs.ensureDir(DEST_DIR)
 })
 afterEach(function() {
+  app = null
   return fs.remove(DEST_DIR)
 })
-function setTestConfig(app) {
-  app.loadConfig({
-    globalBlueprintsPath: path.resolve(
-      __dirname,
-      '../fixtures/global-blueprints'
-    ),
-    projectBlueprintsPath: path.resolve(
-      __dirname,
-      '../fixtures/project-blueprints'
-    )
-  })
-}
 
 describe('App', function() {
   it('can load config', function() {
     const app = new App()
+    const HOME_BLUEPRINT_CONFIG = path.resolve(os.homedir(), './.blueprints')
     expect(app.settings).to.be.an('object')
     expect(app.settings).to.have.property('globalBlueprintsPath')
+    expect(app.settings.globalBlueprintsPath).to.eql(HOME_BLUEPRINT_CONFIG)
     expect(app.settings).to.have.property('projectBlueprintsPath')
   })
+
   it('can generate global blueprints', function() {
-    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-global')
-    const app = new App()
-    setTestConfig(app)
-
     app
-      .generateFromBlueprint('global-blueprint', BLUEPRINT_DEST)
+      .generateFromBlueprint('global-blueprint', GLOBAL_BLUEPRINT_DEST)
       .then(results => {
-        return fs.pathExists(BLUEPRINT_DEST)
+        return fs.pathExists(GLOBAL_BLUEPRINT_DEST)
       })
       .then(exists => expect(exists).to.eql(true))
       .catch(err => console.log(err))
   })
+
   it('can generate from project blueprints', function() {
-    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
-    const app = new App()
-    setTestConfig(app)
-
     app
-      .generateFromBlueprint('project-blueprint', BLUEPRINT_DEST)
+      .generateFromBlueprint('project-blueprint', PROJECT_BLUEPRINT_DEST)
       .then(results => {
-        return fs.pathExists(BLUEPRINT_DEST)
+        return fs.pathExists(PROJECT_BLUEPRINT_DEST)
       })
       .then(exists => expect(exists).to.eql(true))
       .catch(err => console.log(err))
   })
-  it('can resolve project blueprint over global blueprint', function() {
-    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
-    const app = new App()
-    setTestConfig(app)
 
+  it('can resolve project blueprint over global blueprint', function() {
     app
-      .generateFromBlueprint('blueprint', BLUEPRINT_DEST)
+      .generateFromBlueprint('blueprint', PROJECT_BLUEPRINT_DEST)
       .then(results => {
-        return fs.readFile(path.resolve(BLUEPRINT_DEST, 'example.txt'), 'utf8')
+        return fs.readFile(
+          path.resolve(PROJECT_BLUEPRINT_DEST, 'example.txt'),
+          'utf8'
+        )
       })
       .then(file => {
         expect(file).to.include('Hello')
       })
       .catch(err => console.log(err))
   })
-  it('can replace blueprint template variables', function() {
-    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
-    const app = new App()
-    setTestConfig(app)
 
+  it('can replace blueprint template variables', function() {
     app
-      .generateFromBlueprint('blueprint', BLUEPRINT_DEST, { name: 'Cliff' })
+      .generateFromBlueprint('blueprint', PROJECT_BLUEPRINT_DEST, {
+        name: 'Cliff'
+      })
       .then(results => {
-        return fs.readFile(path.resolve(BLUEPRINT_DEST, 'example.txt'), 'utf8')
+        return fs.readFile(
+          path.resolve(PROJECT_BLUEPRINT_DEST, 'example.txt'),
+          'utf8'
+        )
       })
       .then(file => {
         expect(file.trim()).to.eql('Hello, Cliff!')
       })
       .catch(err => console.log(err))
   })
+
   it.skip('can rename files and directories')
 })
