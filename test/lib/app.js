@@ -86,5 +86,27 @@ describe('App', function() {
       .catch(err => console.log(err))
   })
 
-  it.skip('can rename files and directories')
+  it('can rename files and directories', function() {
+    app
+      .generateFromBlueprint('blueprint', PROJECT_BLUEPRINT_DEST, {
+        name: 'Cliff'
+      })
+      .then(results => {
+        return Promise.all([
+          fs.readFile(
+            path.resolve(PROJECT_BLUEPRINT_DEST, 'example.txt'),
+            'utf8'
+          ),
+          fs.readFile(
+            path.resolve(PROJECT_BLUEPRINT_DEST, './users/Cliff.txt'),
+            'utf8'
+          )
+        ])
+      })
+      .then(file => {
+        expect(file[0].trim()).to.eql('Hello, Cliff!')
+        expect(file[1].trim()).to.eql('Hi, Cliff!')
+      })
+      .catch(err => console.log(err))
+  })
 })
