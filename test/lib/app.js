@@ -73,6 +73,20 @@ describe('App', function() {
       })
       .catch(err => console.log(err))
   })
-  it.skip('can replace blueprint template variables')
+  it('can replace blueprint template variables', function() {
+    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
+    const app = new App()
+    setTestConfig(app)
+
+    app
+      .generateFromBlueprint('blueprint', BLUEPRINT_DEST, { name: 'Cliff' })
+      .then(results => {
+        return fs.readFile(path.resolve(BLUEPRINT_DEST, 'example.txt'), 'utf8')
+      })
+      .then(file => {
+        expect(file.trim()).to.eql('Hello, Cliff!')
+      })
+      .catch(err => console.log(err))
+  })
   it.skip('can rename files and directories')
 })
