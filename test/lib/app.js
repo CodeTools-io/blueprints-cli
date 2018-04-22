@@ -58,6 +58,21 @@ describe('App', function() {
       .then(exists => expect(exists).to.eql(true))
       .catch(err => console.log(err))
   })
+  it('can resolve project blueprint over global blueprint', function() {
+    const BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
+    const app = new App()
+    setTestConfig(app)
+
+    app
+      .generateFromBlueprint('blueprint', BLUEPRINT_DEST)
+      .then(results => {
+        return fs.readFile(path.resolve(BLUEPRINT_DEST, 'example.txt'), 'utf8')
+      })
+      .then(file => {
+        expect(file).to.include('Hello')
+      })
+      .catch(err => console.log(err))
+  })
   it.skip('can replace blueprint template variables')
   it.skip('can rename files and directories')
 })
