@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive",
+    "test": "environment='test' mocha --recursive",
     "test:watch": "nodemon --watch 'test' --watch 'lib' --exec 'npm test'"
   },
   "keywords": [],
@@ -15,5 +15,8 @@
     "mocha": "^5.1.1",
     "nodemon": "^1.17.3",
     "prettier": "1.12.1"
+  },
+  "dependencies": {
+    "fs-extra": "^5.0.0"
   }
 }
