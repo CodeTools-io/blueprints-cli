@@ -1,3 +1,3 @@
 const App = require('./lib/app')
 
-new App()
+module.exports = new App()

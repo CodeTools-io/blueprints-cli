@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "bp": "./bin/cli.js"
+  },
   "scripts": {
     "test": "environment='test' mocha --recursive",
     "test:watch": "nodemon --watch 'test' --watch 'lib' --exec 'npm test'"
@@ -17,6 +20,7 @@
     "prettier": "1.12.1"
   },
   "dependencies": {
+    "commander": "^2.15.1",
     "dot-prop": "^4.2.0",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.5",
