@@ -1,7 +1,7 @@
 {
-  "name": "blueprints",
+  "name": "@cliffpyles/blueprints",
   "version": "1.0.0",
-  "description": "",
+  "description": "A tool for generating predefined files and directories",
   "main": "index.js",
   "bin": {
     "bp": "./bin/cli.js"
@@ -10,7 +10,16 @@
     "test": "environment='test' mocha --recursive",
     "test:watch": "nodemon --watch 'test' --watch 'lib' --exec 'npm test'"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "cli",
+    "scaffold",
+    "generate",
+    "boilerplate",
+    "automation",
+    "workflow",
+    "template"
+  ],
   "author": "Cliff Pyles <cliff@cliffpyles.com>",
   "license": "MIT",
   "devDependencies": {
