@@ -2,7 +2,7 @@
 
 const prop = require('dot-prop')
 const cli = require('commander')
-const App = require('../lib/app')
+const App = require('../lib/App')
 
 const app = new App()
 
@@ -45,7 +45,7 @@ cli
 
       return setValue(data, key, value)
     }, {})
-    app.generateFromBlueprint(blueprint, destination, data)
+    app.generate(blueprint, data, { destination })
   })
 
 cli.parse(process.argv)
