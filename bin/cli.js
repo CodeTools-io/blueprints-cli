@@ -4,8 +4,6 @@ const prop = require('dot-prop')
 const cli = require('commander')
 const App = require('../lib/App')
 
-const app = new App()
-
 function setValue(data, key, value) {
   const arrayRegex = /([\w\.]+)\[(\d)*\]/
   const keySections = key.match(arrayRegex)
@@ -45,7 +43,41 @@ cli
 
       return setValue(data, key, value)
     }, {})
-    app.generate(blueprint, data, { destination })
+    const app = new App()
+    app.generateBlueprintInstance(blueprint, data, { destination })
+  })
+
+cli
+  .command(`list`)
+  .alias('ls')
+  .description('List all available blueprints')
+  .action(function() {
+    const app = new App()
+    const blueprints = app.getBlueprints()
+
+    blueprints
+      .then(results => {
+        console.log(`--- Global Blueprints ---`)
+        if (results.globals && results.globals.length) {
+          results.globals.forEach(result => {
+            console.log(`${result.name} - ${result.path}`)
+          })
+        } else {
+          console.log(`no global blueprints found`)
+        }
+
+        console.log(`\n--- Project Blueprints ---`)
+        if (results.projects && results.projects.length) {
+          results.projects.forEach(result => {
+            console.log(`${result.name} - ${result.path}`)
+          })
+        } else {
+          console.log(`no project blueprints found`)
+        }
+      })
+      .catch(err => {
+        throw err
+      })
   })
 
 cli.parse(process.argv)

@@ -1,7 +1,7 @@
 [x] generate files and directories based on blueprints (v1.0.0)
 [x] allow for global blueprints (v1.0.0)
 [x] allow for project blueprints (v1.0.0)
-[ ] list available blueprints
+[x] list available blueprints
 [ ] create new blueprints
 [ ] remove blueprints
 [ ] add namespacing for blueprints

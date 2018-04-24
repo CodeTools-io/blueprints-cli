@@ -8,6 +8,7 @@
     "bp": "./bin/cli.js"
   },
   "scripts": {
+    "postinstall": "mkdir -p ~/.blueprints",
     "test": "mocha --recursive",
     "test:watch": "nodemon --watch 'test' --watch 'lib' --exec 'npm test'"
   },
