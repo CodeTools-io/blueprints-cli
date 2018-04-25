@@ -125,9 +125,29 @@ cli
         console.log(`${blueprint.name} was created at: ${blueprint.location}`)
       })
       .catch(err => {
-        console.log(err)
         throw err
       })
   })
 
+cli
+  .command('remove <blueprint>')
+  .alias('rm')
+  .option('-g, --global', 'Removes the global blueprint')
+  .description('Removes a blueprint')
+  .action(function remove(blueprint, options) {
+    const blueprintName = blueprint
+    const isGlobal = options.global || false
+    const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
+    const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
+    const location = isGlobal ? globalLocation : projectLocation
+
+    app
+      .removeBlueprint(blueprintName, { location })
+      .then(blueprint => {
+        console.log(`${blueprint.name} was removed from: ${blueprint.location}`)
+      })
+      .catch(err => {
+        throw err
+      })
+  })
 cli.parse(process.argv)

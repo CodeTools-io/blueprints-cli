@@ -46,10 +46,23 @@ describe('Blueprint', function() {
       location: path.resolve(TEMP_DIR, './modal'),
       source: EXAMPLE_SOURCE_DIR
     })
-    blueprint.save().then(newBlueprint => {
+    return blueprint.save().then(newBlueprint => {
       expect(newBlueprint).to.contain({
         name: 'modal',
         location: path.resolve(TEMP_DIR, './modal')
+      })
+    })
+  })
+
+  it('can remove blueprints', function() {
+    const blueprint = new Blueprint({
+      name: 'modal',
+      location: path.resolve(TEMP_DIR, './modal'),
+      source: EXAMPLE_SOURCE_DIR
+    })
+    return blueprint.save().then(newBlueprint => {
+      return newBlueprint.remove().then(oldBlueprint => {
+        expect(fs.pathExistsSync(oldBlueprint)).to.eql(false)
       })
     })
   })
