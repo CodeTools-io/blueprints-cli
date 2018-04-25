@@ -1,3 +1,0 @@
-{
-  "content": "content for a global blueprint"
-}

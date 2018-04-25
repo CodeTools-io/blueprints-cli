@@ -6,136 +6,51 @@ const fs = require('fs-extra')
 const Blueprint = require('../../lib/Blueprint')
 
 const FIXTURE_DIR = path.resolve(__dirname, '../fixtures')
-const GLOBAL_BLUEPRINTS_PATH = path.resolve(FIXTURE_DIR, './global-blueprints')
-const PROJECT_BLUEPRINTS_PATH = path.resolve(
-  FIXTURE_DIR,
-  './project-blueprints'
-)
+const BLUEPRINTS_DIR = path.resolve(FIXTURE_DIR, './blueprints')
+const EXAMPLE_SOURCE_DIR = path.resolve(FIXTURE_DIR, './source-folder')
 
-const DEST_DIR = path.resolve(__dirname, '../fixtures/tmp')
-const GLOBAL_BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-global')
-const PROJECT_BLUEPRINT_DEST = path.resolve(DEST_DIR, './generated-from-local')
+const TEMP_DIR = path.resolve(__dirname, '../fixtures/tmp')
 
 beforeEach(function() {
-  return fs.ensureDir(DEST_DIR)
+  return fs.ensureDir(TEMP_DIR)
 })
 afterEach(function() {
-  return fs.remove(DEST_DIR)
+  return Promise.all([fs.remove(TEMP_DIR)])
 })
 
 describe('Blueprint', function() {
-  it('can generate global blueprints', function() {
-    const blueprint = new Blueprint(
-      'global-blueprint',
-      {},
-      {
-        globalPath: GLOBAL_BLUEPRINTS_PATH,
-        projectPath: PROJECT_BLUEPRINTS_PATH,
-        destination: GLOBAL_BLUEPRINT_DEST
-      }
-    )
+  it('can generate blueprint instances', function() {
+    const blueprint = new Blueprint({
+      name: 'example',
+      location: path.resolve(BLUEPRINTS_DIR, './example')
+    })
     return blueprint
-      .generate()
-      .then(results => {
-        return fs.pathExists(GLOBAL_BLUEPRINT_DEST)
-      })
-      .then(exists => expect(exists).to.eql(true))
-  })
-
-  it('can generate from project blueprints', function() {
-    const blueprint = new Blueprint(
-      'project-blueprint',
-      {},
-      {
-        globalPath: GLOBAL_BLUEPRINTS_PATH,
-        projectPath: PROJECT_BLUEPRINTS_PATH,
-        destination: PROJECT_BLUEPRINT_DEST
-      }
-    )
-    return blueprint
-      .generate()
-      .then(results => {
-        return fs.pathExists(PROJECT_BLUEPRINT_DEST)
-      })
-      .then(exists => expect(exists).to.eql(true))
-  })
-
-  it('can resolve project blueprint over global blueprint', function() {
-    const blueprint = new Blueprint(
-      'blueprint',
-      {},
-      {
-        globalPath: GLOBAL_BLUEPRINTS_PATH,
-        projectPath: PROJECT_BLUEPRINTS_PATH,
-        destination: PROJECT_BLUEPRINT_DEST
-      }
-    )
-    blueprint
-      .generate()
-      .then(results => {
-        return fs.readFile(
-          path.resolve(PROJECT_BLUEPRINT_DEST, 'example.txt'),
-          'utf8'
+      .generate(path.resolve(TEMP_DIR, './example-instance'), { name: 'Cliff' })
+      .then(blueprintInstance => {
+        const instancePath = path.resolve(TEMP_DIR, './example-instance')
+        const textfilePath = path.resolve(instancePath, './users/Cliff.txt')
+        expect(blueprintInstance).to.include({
+          type: 'example',
+          location: instancePath
+        })
+        expect(fs.pathExistsSync(instancePath)).to.eql(true)
+        expect(fs.readFileSync(textfilePath, 'utf8')).to.contain(
+          'Hello, Cliff!'
         )
       })
-      .then(file => {
-        expect(file).to.include('Hello')
-      })
-      .catch(err => console.log(err))
   })
 
-  it('can replace blueprint template variables', function() {
-    const blueprint = new Blueprint(
-      'blueprint',
-      { name: 'Cliff' },
-      {
-        globalPath: GLOBAL_BLUEPRINTS_PATH,
-        projectPath: PROJECT_BLUEPRINTS_PATH,
-        destination: PROJECT_BLUEPRINT_DEST
-      }
-    )
-    blueprint
-      .generate()
-      .then(results => {
-        return fs.readFile(
-          path.resolve(PROJECT_BLUEPRINT_DEST, 'example.txt'),
-          'utf8'
-        )
+  it('can create new blueprints', function() {
+    const blueprint = new Blueprint({
+      name: 'modal',
+      location: path.resolve(TEMP_DIR, './modal'),
+      source: EXAMPLE_SOURCE_DIR
+    })
+    blueprint.save().then(newBlueprint => {
+      expect(newBlueprint).to.contain({
+        name: 'modal',
+        location: path.resolve(TEMP_DIR, './modal')
       })
-      .then(file => {
-        expect(file.trim()).to.eql('Hello, Cliff!')
-      })
-      .catch(err => console.log(err))
-  })
-
-  it('can rename files and directories', function() {
-    const blueprint = new Blueprint(
-      'blueprint',
-      { name: 'Cliff' },
-      {
-        globalPath: GLOBAL_BLUEPRINTS_PATH,
-        projectPath: PROJECT_BLUEPRINTS_PATH,
-        destination: PROJECT_BLUEPRINT_DEST
-      }
-    )
-    blueprint
-      .generate()
-      .then(results => {
-        return Promise.all([
-          fs.readFile(
-            path.resolve(PROJECT_BLUEPRINT_DEST, 'example.txt'),
-            'utf8'
-          ),
-          fs.readFile(
-            path.resolve(PROJECT_BLUEPRINT_DEST, './users/Cliff.txt'),
-            'utf8'
-          )
-        ])
-      })
-      .then(file => {
-        expect(file[0].trim()).to.eql('Hello, Cliff!')
-        expect(file[1].trim()).to.eql('Hi, Cliff!')
-      })
-      .catch(err => console.log(err))
+    })
   })
 })

@@ -1,8 +1,24 @@
 #!/usr/bin/env node
 
+const fs = require('fs-extra')
+const os = require('os')
+const path = require('path')
+
 const prop = require('dot-prop')
 const cli = require('commander')
+
 const App = require('../lib/App')
+
+const CURRENT_PATH = process.cwd()
+const CURRENT_DIRNAME = path.basename(process.cwd())
+const PROJECT_ROOT_PATH = getProjectRoot(process.cwd())
+const PROJECT_BLUEPRINTS_PATH = path.resolve(PROJECT_ROOT_PATH, './.blueprints')
+const GLOBAL_BLUEPRINTS_PATH = path.resolve(os.homedir(), './.blueprints')
+
+const app = new App({
+  globalPath: GLOBAL_BLUEPRINTS_PATH,
+  projectPath: PROJECT_BLUEPRINTS_PATH
+})
 
 function setValue(data, key, value) {
   const arrayRegex = /([\w\.]+)\[(\d)*\]/
@@ -29,13 +45,25 @@ function setValue(data, key, value) {
   return data
 }
 
+function getProjectRoot(directory) {
+  const isProjectRoot = fs.pathExistsSync(
+    path.resolve(directory, './.blueprints')
+  )
+
+  if (isProjectRoot) {
+    return directory
+  }
+
+  return getProjectRoot(path.resolve(directory, '../'))
+}
+
 cli
-  .command(`generate <blueprint>`)
+  .command('generate <blueprint>')
   .option('-d, --dest <destination>', 'Which directory to place the files')
   .alias('g')
   .description('Generate files with a blueprint')
-  .action(function(blueprint, options) {
-    const destination = options.dest || './'
+  .action(function generate(blueprint, options) {
+    const destination = options.dest || CURRENT_PATH
     const args = process.argv.slice(4)
     const rawData = args.filter(arg => !arg.startsWith('--'))
     const data = rawData.reduce((data, arg) => {
@@ -43,39 +71,61 @@ cli
 
       return setValue(data, key, value)
     }, {})
-    const app = new App()
-    app.generateBlueprintInstance(blueprint, data, { destination })
+
+    app.generateBlueprintInstance(blueprint, destination, data)
   })
 
 cli
-  .command(`list`)
+  .command('list')
   .alias('ls')
   .description('List all available blueprints')
-  .action(function() {
-    const app = new App()
-    const blueprints = app.getBlueprints()
+  .action(function list() {
+    const blueprints = app.getAllBlueprints()
 
     blueprints
       .then(results => {
         console.log(`--- Global Blueprints ---`)
-        if (results.globals && results.globals.length) {
-          results.globals.forEach(result => {
-            console.log(`${result.name} - ${result.path}`)
+        if (results.global && results.global.length) {
+          results.global.forEach(result => {
+            console.log(`${result.name} - ${result.location}`)
           })
         } else {
           console.log(`no global blueprints found`)
         }
 
         console.log(`\n--- Project Blueprints ---`)
-        if (results.projects && results.projects.length) {
-          results.projects.forEach(result => {
-            console.log(`${result.name} - ${result.path}`)
+        if (results.project && results.project.length) {
+          results.project.forEach(result => {
+            console.log(`${result.name} - ${result.location}`)
           })
         } else {
           console.log(`no project blueprints found`)
         }
       })
       .catch(err => {
+        throw err
+      })
+  })
+
+cli
+  .command('init [blueprint]')
+  .option('-g, --global', 'Creates the blueprint globally')
+  .description('Create blueprint with contents of current directory')
+  .action(function initialize(blueprint, options) {
+    const blueprintName = blueprint || CURRENT_DIRNAME
+    const isGlobal = options.global || false
+    const source = CURRENT_PATH
+    const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
+    const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
+    const location = isGlobal ? globalLocation : projectLocation
+
+    app
+      .createBlueprint(blueprintName, { source, location })
+      .then(blueprint => {
+        console.log(`${blueprint.name} was created at: ${blueprint.location}`)
+      })
+      .catch(err => {
+        console.log(err)
         throw err
       })
   })
