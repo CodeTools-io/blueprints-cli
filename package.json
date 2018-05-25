@@ -1,5 +1,5 @@
 {
-  "name": "@cliffpyles/blueprints",
+  "name": "@cliffpyles/blueprints-cli",
   "version": "1.0.0",
   "description": "A tool for generating predefined files and directories",
   "private": false,
