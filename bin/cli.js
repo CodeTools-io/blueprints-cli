@@ -57,12 +57,13 @@ function getProjectRoot(directory) {
   return getProjectRoot(path.resolve(directory, '../'))
 }
 
+cli.version('1.0.1')
 cli
-  .command('generate <blueprint>')
+  .command('generate <blueprint> <blueprintInstance>')
   .option('-d, --dest <destination>', 'Which directory to place the files')
   .alias('g')
   .description('Generate files with a blueprint')
-  .action(function generate(blueprint, options) {
+  .action(function generate(blueprint, blueprintInstance, options) {
     const destination = options.dest || CURRENT_PATH
     const args = process.argv.slice(4)
     const rawData = args.filter(arg => !arg.startsWith('--'))
@@ -71,6 +72,9 @@ cli
 
       return setValue(data, key, value)
     }, {})
+
+    data['blueprint'] = blueprint
+    data['blueprintInstance'] = blueprintInstance
 
     app.generateBlueprintInstance(blueprint, destination, data)
   })
