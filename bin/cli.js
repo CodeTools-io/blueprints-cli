@@ -70,35 +70,29 @@ cli
   })
 
 cli
-  .command('list')
+  .command('list [namespace]')
   .alias('ls')
   .description('List all available blueprints')
-  .action(function list() {
-    const blueprints = app.getAllBlueprints()
+  .action(async function list(namespace = '') {
+    const blueprints = await app.getAllBlueprints(namespace)
 
-    blueprints
-      .then(results => {
-        console.log(`--- Global Blueprints ---`)
-        if (results.global && results.global.length) {
-          results.global.forEach(result => {
-            console.log(`${result.name} - ${result.location}`)
-          })
-        } else {
-          console.log(`no global blueprints found`)
-        }
+    console.log(`--- Global Blueprints ---`)
+    if (blueprints.global && blueprints.global.length) {
+      blueprints.global.forEach(blueprint => {
+        console.log(`${blueprint.name} - ${blueprint.location}`)
+      })
+    } else {
+      console.log(`no global blueprints found`)
+    }
 
-        console.log(`\n--- Project Blueprints ---`)
-        if (results.project && results.project.length) {
-          results.project.forEach(result => {
-            console.log(`${result.name} - ${result.location}`)
-          })
-        } else {
-          console.log(`no project blueprints found`)
-        }
+    console.log(`\n--- Project Blueprints ---`)
+    if (blueprints.project && blueprints.project.length) {
+      blueprints.project.forEach(blueprint => {
+        console.log(`${blueprint.name} - ${blueprint.location}`)
       })
-      .catch(err => {
-        throw err
-      })
+    } else {
+      console.log(`no project blueprints found`)
+    }
   })
 
 cli
