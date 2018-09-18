@@ -7,12 +7,13 @@ const path = require('path')
 
 const prop = require('dot-prop')
 const cli = require('commander')
+const pkgDir = require('pkg-dir')
 
 const App = require('../lib/App')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
-const PROJECT_ROOT_PATH = getProjectRoot(process.cwd())
+const PROJECT_ROOT_PATH = path.resolve(pkgDir.sync())
 const PROJECT_BLUEPRINTS_PATH = path.resolve(PROJECT_ROOT_PATH, './.blueprints')
 const GLOBAL_BLUEPRINTS_PATH = path.resolve(os.homedir(), './.blueprints')
 
@@ -44,18 +45,6 @@ function setValue(data, key, value) {
     prop.set(data, key, value)
   }
   return data
-}
-
-function getProjectRoot(directory) {
-  const isProjectRoot = fs.pathExistsSync(
-    path.resolve(directory, './.blueprints')
-  )
-
-  if (isProjectRoot) {
-    return directory
-  }
-
-  return getProjectRoot(path.resolve(directory, '../'))
 }
 
 cli.version(package.version)
