@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const package = require('../package')
 const fs = require('fs-extra')
 const os = require('os')
 const path = require('path')
@@ -57,7 +58,7 @@ function getProjectRoot(directory) {
   return getProjectRoot(path.resolve(directory, '../'))
 }
 
-cli.version('1.0.1')
+cli.version(package.version)
 cli
   .command('generate <blueprint> <blueprintInstance>')
   .option('-d, --dest <destination>', 'Which directory to place the files')
