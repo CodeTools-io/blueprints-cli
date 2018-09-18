@@ -6,7 +6,7 @@ Todo:
   ✔ create new blueprints @done(18-04-25 07:51)
   ✔ initialize blueprints with an existing directory @done(18-04-25 07:51)
   ✔ remove blueprints @done(18-04-25 08:27)
-  ☐ add namespacing for blueprints
+  ✔ add namespacing for blueprints
   ☐ add ignore file for files and directories in blueprint
   ☐ add support for default data values
   ☐ add hooks for commands(ex. preGenerate, postGenerate)
