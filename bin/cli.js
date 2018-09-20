@@ -13,7 +13,7 @@ const App = require('../lib/App')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
-const PROJECT_ROOT_PATH = path.resolve(pkgDir.sync())
+const PROJECT_ROOT_PATH = pkgDir.sync() || CURRENT_PATH
 const PROJECT_BLUEPRINTS_PATH = path.resolve(PROJECT_ROOT_PATH, './.blueprints')
 const GLOBAL_BLUEPRINTS_PATH = path.resolve(os.homedir(), './.blueprints')
 
@@ -48,6 +48,7 @@ function setValue(data, key, value) {
 }
 
 cli.version(package.version)
+
 cli
   .command('generate <blueprint> <blueprintInstance>')
   .option('-d, --dest <destination>', 'Which directory to place the files')
@@ -138,4 +139,5 @@ cli
         throw err
       })
   })
+
 cli.parse(process.argv)
