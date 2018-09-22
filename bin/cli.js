@@ -7,6 +7,7 @@ const path = require('path')
 
 const prop = require('dot-prop')
 const cli = require('commander')
+const inflection = require('inflection')
 const pkgDir = require('pkg-dir')
 
 const App = require('../lib/App')
@@ -63,9 +64,11 @@ cli
 
       return setValue(data, key, value)
     }, {})
-
+    const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
     data['blueprint'] = blueprint
     data['blueprintInstance'] = blueprintInstance
+    data['blueprintInstance__ClassFormat'] = inflection.classify(standardBlueprintInstance)
+    data['blueprintInstance__dashed-format'] = inflection.dasherize(standardBlueprintInstance)
 
     app.generateBlueprintInstance(blueprint, destination, data)
   })
