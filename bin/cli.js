@@ -67,8 +67,12 @@ cli
     const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
     data['blueprint'] = blueprint
     data['blueprintInstance'] = blueprintInstance
-    data['blueprintInstance__ClassFormat'] = inflection.classify(standardBlueprintInstance)
-    data['blueprintInstance__dashed-format'] = inflection.dasherize(standardBlueprintInstance)
+    data['blueprintInstance_ClassFormat'] = inflection.classify(
+      standardBlueprintInstance
+    )
+    data['blueprintInstance_dashed-format'] = inflection
+      .dasherize(standardBlueprintInstance)
+      .toLowerCase()
 
     app.generateBlueprintInstance(blueprint, destination, data)
   })
