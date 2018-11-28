@@ -73,6 +73,15 @@ cli
     data['blueprintInstance_dashed-format'] = inflection
       .dasherize(standardBlueprintInstance)
       .toLowerCase()
+    data['blueprintInstance_slug-format'] =
+      data['blueprintInstance_dashed-format']
+    data['blueprintInstance_camelCaseFormat'] = inflection.camelize(
+      standardBlueprintInstance,
+      true
+    )
+    data['blueprintInstance_pascalCaseFormat'] = inflection.camelize(
+      standardBlueprintInstance
+    )
 
     app.generateBlueprintInstance(blueprint, destination, data)
   })
