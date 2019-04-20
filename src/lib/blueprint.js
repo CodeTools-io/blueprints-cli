@@ -1,9 +1,6 @@
-const os = require('os')
 const path = require('path')
-
+const child_process = require('child_process')
 const fs = require('fs-extra')
-
-const rc = require('rc')
 const { default: scaffold } = require('scaffold-helper')
 
 class Blueprint {
@@ -12,8 +9,14 @@ class Blueprint {
     this.location = location
     this.source = source
     this.filesPath = path.resolve(location, './files')
+    this.configPath = path.resolve(location, './blueprint.json')
     this.preGenerateScript = path.resolve(location, './preGenerate.js')
     this.postGenerateScript = path.resolve(location, './postGenerate.js')
+    this.config = {}
+
+    if (fs.pathExistsSync(this.configPath)) {
+      this.config = require(this.configPath)
+    }
   }
 
   remove() {
@@ -63,6 +66,11 @@ class Blueprint {
   }
 
   preGenerate(destination, data = {}) {
+    if (this.config.preGenerate) {
+      this.config.preGenerate.forEach(command => {
+        child_process.exec(command)
+      })
+    }
     return new Promise((resolve, reject) => {
       if (fs.pathExistsSync(this.preGenerateScript)) {
         const blueprintScript = require(this.preGenerateScript)
@@ -75,6 +83,11 @@ class Blueprint {
   }
 
   postGenerate(destination, data = {}) {
+    if (this.config.postGenerate) {
+      this.config.postGenerate.forEach(command => {
+        child_process.exec(command)
+      })
+    }
     return new Promise((resolve, reject) => {
       if (fs.pathExistsSync(this.postGenerateScript)) {
         const blueprintScript = require(this.postGenerateScript)

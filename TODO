@@ -14,3 +14,7 @@ Todo:
   ☐ add documentation for installing blueprints package
   ☐ add documentation for creating new blueprints
   ☐ add documentation for using blueprints
+  ☐ add support for blueprint.json in blueprints
+  ☐ add support for blueprints settings in projects
+  ☐ add ability to execute arbitrary shell commands after and before generation
+
