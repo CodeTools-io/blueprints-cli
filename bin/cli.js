@@ -8,7 +8,7 @@ const inflection = require('inflection')
 const pkgDir = require('pkg-dir')
 
 const App = require('../src/app')
-const setValue = require('../src/util/set-value')
+const setValue = require('../src/utils/set-value')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
