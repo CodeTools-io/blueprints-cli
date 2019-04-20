@@ -3,13 +3,13 @@ const path = require('path')
 
 const { expect } = require('chai')
 const fs = require('fs-extra')
-const Blueprint = require('../../lib/Blueprint')
+const Blueprint = require('../../../src/lib/blueprint')
 
-const FIXTURE_DIR = path.resolve(__dirname, '../fixtures')
+const FIXTURE_DIR = path.resolve(__dirname, '../../fixtures')
 const BLUEPRINTS_DIR = path.resolve(FIXTURE_DIR, './blueprints')
 const EXAMPLE_SOURCE_DIR = path.resolve(FIXTURE_DIR, './source-folder')
 
-const TEMP_DIR = path.resolve(__dirname, '../fixtures/tmp')
+const TEMP_DIR = path.resolve(__dirname, '../../fixtures/tmp')
 
 beforeEach(function() {
   return fs.ensureDir(TEMP_DIR)

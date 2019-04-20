@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const package = require('../package')
+const pkg = require('../package')
 const fs = require('fs-extra')
 const os = require('os')
 const path = require('path')
@@ -10,7 +10,7 @@ const cli = require('commander')
 const inflection = require('inflection')
 const pkgDir = require('pkg-dir')
 
-const App = require('../lib/App')
+const App = require('../src/app')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
@@ -48,7 +48,7 @@ function setValue(data, key, value) {
   return data
 }
 
-cli.version(package.version)
+cli.version(pkg.version)
 
 cli
   .command('generate <blueprint> <blueprintInstance>')

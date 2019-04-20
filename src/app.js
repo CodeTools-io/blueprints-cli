@@ -5,7 +5,7 @@ const fs = require('fs-extra')
 
 const scaffold = require('scaffold-helper')
 
-const Blueprint = require('./Blueprint')
+const Blueprint = require('./lib/blueprint')
 
 class App {
   constructor({ globalPath, projectPath }) {
@@ -84,7 +84,9 @@ class App {
     const globalBlueprintsPath = path.resolve(this.globalPath, namespace)
     const projectBlueprintsPath = path.resolve(this.projectPath, namespace)
     const globalBlueprintsPathExists = await fs.pathExists(globalBlueprintsPath)
-    const projectBlueprintsPathExists = await fs.pathExists(projectBlueprintsPath)
+    const projectBlueprintsPathExists = await fs.pathExists(
+      projectBlueprintsPath
+    )
     let globalBlueprints = []
     let projectBlueprints = []
 

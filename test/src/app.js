@@ -3,7 +3,7 @@ const path = require('path')
 
 const { expect } = require('chai')
 
-const App = require('../../lib/App')
+const App = require('../../src/app')
 
 const GLOBAL_BLUEPRINTS_DIR = path.resolve(
   __dirname,
