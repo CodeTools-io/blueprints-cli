@@ -68,9 +68,8 @@ class Blueprint {
   preGenerate(destination, data = {}) {
     if (this.config.preGenerate) {
       this.config.preGenerate.forEach(command => {
-        let modifiedCommand = command
-        modifiedCommand.replace('<destination>', destination)
-        modifiedCommand.replace('<name>', this.name)
+        let modifiedCommand = command.replace('<destination>', destination)
+        modifiedCommand = command.replace('<name>', this.name)
         child_process.exec(modifiedCommand)
       })
     }
@@ -88,9 +87,8 @@ class Blueprint {
   postGenerate(destination, data = {}) {
     if (this.config.postGenerate) {
       this.config.postGenerate.forEach(command => {
-        let modifiedCommand = command
-        modifiedCommand.replace('<destination>', destination)
-        modifiedCommand.replace('<name>', this.name)
+        let modifiedCommand = command.replace('<destination>', destination)
+        modifiedCommand = command.replace('<name>', this.name)
         child_process.exec(modifiedCommand)
       })
     }
