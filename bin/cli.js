@@ -65,6 +65,14 @@ cli
   })
 
 cli
+  .command('new <blueprint>')
+  .option('-g, --global', 'Creates the blueprint globally', false)
+  .description('Create a generic blueprint')
+  .action((blueprint, options) => {
+    app.createBlueprint(blueprint, options)
+  })
+
+cli
   .command('init [blueprint]')
   .option('-g, --global', 'Creates the blueprint globally')
   .description('Create blueprint with contents of current directory')
@@ -77,7 +85,7 @@ cli
     const location = isGlobal ? globalLocation : projectLocation
 
     app
-      .createBlueprint(blueprintName, { source, location })
+      .initializeBlueprint(blueprintName, { source, location })
       .then(blueprint => {
         console.log(`${blueprint.name} was created at: ${blueprint.location}`)
       })
