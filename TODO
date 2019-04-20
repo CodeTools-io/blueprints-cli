@@ -8,13 +8,13 @@ Todo:
   ✔ remove blueprints @done(18-04-25 08:27)
   ✔ add namespacing for blueprints
   ☐ add ignore file for files and directories in blueprint
-  ☐ add support for default data values
+  ✔ add support for default data values
   ✔ add hooks for commands(ex. preGenerate, postGenerate)
   ☐ add blueprint creation based on external sources (ex. github)
   ☐ add documentation for installing blueprints package
   ☐ add documentation for creating new blueprints
   ☐ add documentation for using blueprints
-  ☐ add support for blueprint.json in blueprints
+  ✔ add support for blueprint.json in blueprints
   ☐ add support for blueprints settings in projects
-  ☐ add ability to execute arbitrary shell commands after and before generation
+  ✔ add ability to execute arbitrary shell commands after and before generation
 
