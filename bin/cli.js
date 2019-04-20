@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 
 const pkg = require('../package')
-const fs = require('fs-extra')
 const os = require('os')
 const path = require('path')
-
-const prop = require('dot-prop')
 const cli = require('commander')
 const inflection = require('inflection')
 const pkgDir = require('pkg-dir')
 
 const App = require('../src/app')
+const setValue = require('../src/util/set-value')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
@@ -22,31 +20,6 @@ const app = new App({
   globalPath: GLOBAL_BLUEPRINTS_PATH,
   projectPath: PROJECT_BLUEPRINTS_PATH
 })
-
-function setValue(data, key, value) {
-  const arrayRegex = /([\w\.]+)\[(\d)*\]/
-  const keySections = key.match(arrayRegex)
-  if (keySections) {
-    const index = Number.parseInt(keySections[2])
-    const keyName = keySections[1]
-
-    if (!prop.has(data, keyName)) {
-      prop.set(data, keyName, [])
-    }
-
-    const currentVal = prop.get(data, keyName)
-
-    if (Number.isInteger(index)) {
-      currentVal[index] = value
-    } else {
-      currentVal.push(value)
-    }
-    prop.set(data, keyName, currentVal)
-  } else {
-    prop.set(data, key, value)
-  }
-  return data
-}
 
 cli.version(pkg.version)
 
