@@ -1,0 +1,3 @@
+{
+  "postGenerate": ["touch <destination>/didit.txt"]
+}

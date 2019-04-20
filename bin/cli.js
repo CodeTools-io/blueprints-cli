@@ -4,11 +4,11 @@ const pkg = require('../package')
 const os = require('os')
 const path = require('path')
 const cli = require('commander')
-const inflection = require('inflection')
 const pkgDir = require('pkg-dir')
 
 const App = require('../src/app')
-const setValue = require('../src/utils/set-value')
+const getMetadata = require('../src/utils/get-metadata')
+const getTemplateData = require('../src/utils/get-template-data')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
@@ -30,33 +30,12 @@ cli
   .description('Generate files with a blueprint')
   .action(function generate(blueprint, blueprintInstance, options) {
     const destination = options.dest || CURRENT_PATH
-    const args = process.argv.slice(4)
-    const rawData = args.filter(arg => !arg.startsWith('--'))
-    const data = rawData.reduce((data, arg) => {
-      const [key, value] = arg.split('=', 2)
-
-      return setValue(data, key, value)
-    }, {})
-    const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
-    data['blueprint'] = blueprint
-    data['blueprintInstance'] = blueprintInstance
-    data['blueprintInstance_ClassFormat'] = inflection.classify(
-      standardBlueprintInstance
-    )
-    data['blueprintInstance_dashed-format'] = inflection
-      .dasherize(standardBlueprintInstance)
-      .toLowerCase()
-    data['blueprintInstance_slug-format'] =
-      data['blueprintInstance_dashed-format']
-    data['blueprintInstance_camelCaseFormat'] = inflection.camelize(
-      standardBlueprintInstance,
-      true
-    )
-    data['blueprintInstance_pascalCaseFormat'] = inflection.camelize(
-      standardBlueprintInstance
-    )
-
-    app.generateBlueprintInstance(blueprint, destination, data)
+    const data = getTemplateData(process.argv.slice(4))
+    const metadata = getMetadata(blueprintInstance)
+    app.generateBlueprintInstance(blueprint, destination, {
+      ...data,
+      ...metadata
+    })
   })
 
 cli

@@ -29,11 +29,16 @@ describe('Blueprint', function() {
       .then(blueprintInstance => {
         const instancePath = path.resolve(TEMP_DIR, './example-instance')
         const textfilePath = path.resolve(instancePath, './users/Cliff.txt')
+        const postGenerateFilePath = path.resolve(
+          instancePath,
+          './users/Cliff.txt'
+        )
         expect(blueprintInstance).to.include({
           type: 'example',
           location: instancePath
         })
         expect(fs.pathExistsSync(instancePath)).to.eql(true)
+        expect(fs.pathExistsSync(postGenerateFilePath)).to.eql(true)
         expect(fs.readFileSync(textfilePath, 'utf8')).to.contain(
           'Hello, Cliff!'
         )

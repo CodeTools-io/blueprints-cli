@@ -68,7 +68,8 @@ class Blueprint {
   preGenerate(destination, data = {}) {
     if (this.config.preGenerate) {
       this.config.preGenerate.forEach(command => {
-        child_process.exec(command)
+        const modifiedCommand = command.replace('<destination>', destination)
+        child_process.exec(modifiedCommand)
       })
     }
     return new Promise((resolve, reject) => {
@@ -85,7 +86,8 @@ class Blueprint {
   postGenerate(destination, data = {}) {
     if (this.config.postGenerate) {
       this.config.postGenerate.forEach(command => {
-        child_process.exec(command)
+        const modifiedCommand = command.replace('<destination>', destination)
+        child_process.exec(modifiedCommand)
       })
     }
     return new Promise((resolve, reject) => {
