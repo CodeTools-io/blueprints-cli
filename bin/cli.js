@@ -31,7 +31,7 @@ cli
   .action(function generate(blueprint, blueprintInstance, options) {
     const destination = options.dest || CURRENT_PATH
     const data = getTemplateData(process.argv.slice(4))
-    const metadata = getMetadata(blueprintInstance)
+    const metadata = getMetadata({ blueprint, blueprintInstance })
     app.generateBlueprintInstance(blueprint, destination, {
       ...data,
       ...metadata

@@ -1,6 +1,6 @@
 const inflection = require('inflection')
 
-function getMetadata(blueprintInstance) {
+function getMetadata({ blueprintInstance, blueprint }) {
   const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
   let data = {}
   data['blueprint'] = blueprint
