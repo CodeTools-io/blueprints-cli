@@ -61,9 +61,9 @@ class App {
       location: this.getBlueprintPath(name)
     })
 
-    await blueprint.preGenerate(destination, data)
-    await blueprint.generate(destination, data)
-    await blueprint.postGenerate(destination, data)
+    await blueprint.preGenerate({ destination, data })
+    await blueprint.generate({ destination, data })
+    await blueprint.postGenerate({ destination, data })
   }
 
   getBlueprintPath(name) {

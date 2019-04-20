@@ -2,6 +2,7 @@ const path = require('path')
 const child_process = require('child_process')
 const fs = require('fs-extra')
 const { default: scaffold } = require('scaffold-helper')
+const merge = require('lodash/merge')
 
 class Blueprint {
   constructor({ name, location, source }) {
@@ -10,12 +11,15 @@ class Blueprint {
     this.source = source
     this.filesPath = path.resolve(location, './files')
     this.configPath = path.resolve(location, './blueprint.json')
-    this.preGenerateScript = path.resolve(location, './preGenerate.js')
-    this.postGenerateScript = path.resolve(location, './postGenerate.js')
-    this.config = {}
+    this.config = {
+      preGenerate: [],
+      postGenerate: [],
+      data: {}
+    }
 
     if (fs.pathExistsSync(this.configPath)) {
-      this.config = require(this.configPath)
+      const configFile = require(this.configPath)
+      this.config = merge({}, this.config, configFile)
     }
   }
 
@@ -65,45 +69,37 @@ class Blueprint {
       })
   }
 
-  preGenerate(destination, data = {}) {
-    if (this.config.preGenerate) {
-      this.config.preGenerate.forEach(command => {
-        let modifiedCommand = command.replace('<destination>', destination)
-        modifiedCommand = command.replace('<name>', this.name)
-        child_process.exec(modifiedCommand)
-      })
-    }
-    return new Promise((resolve, reject) => {
-      if (fs.pathExistsSync(this.preGenerateScript)) {
-        const blueprintScript = require(this.preGenerateScript)
+  preGenerate({ destination, data = {} }) {
+    const mergedData = merge({}, this.config.data, data)
 
-        blueprintScript(destination, data)
-      }
-
-      resolve()
+    this.config.preGenerate.forEach(configCommand => {
+      let command = configCommand
+      command = command.replace('<blueprintName>', mergedData.blueprint)
+      command = command.replace('<instanceName>', mergedData.blueprintInstance)
+      command = command.replace(
+        '<instancePath>',
+        path.resolve(destination, mergedData.blueprintInstance)
+      )
+      child_process.exec(command)
     })
   }
 
-  postGenerate(destination, data = {}) {
-    if (this.config.postGenerate) {
-      this.config.postGenerate.forEach(command => {
-        let modifiedCommand = command.replace('<destination>', destination)
-        modifiedCommand = command.replace('<name>', this.name)
-        child_process.exec(modifiedCommand)
-      })
-    }
-    return new Promise((resolve, reject) => {
-      if (fs.pathExistsSync(this.postGenerateScript)) {
-        const blueprintScript = require(this.postGenerateScript)
+  postGenerate({ destination, data = {} }) {
+    const mergedData = merge({}, this.config.data, data)
 
-        blueprintScript(destination, data)
-      }
-
-      resolve()
+    this.config.postGenerate.forEach(configCommand => {
+      let command = configCommand
+      command = command.replace('<blueprintName>', mergedData.blueprint)
+      command = command.replace('<instanceName>', mergedData.blueprintInstance)
+      command = command.replace(
+        '<instancePath>',
+        path.resolve(destination, mergedData.blueprintInstance)
+      )
+      child_process.exec(command)
     })
   }
 
-  generate(destination, data = {}) {
+  generate({ destination, data = {} }) {
     if (!destination) {
       throw new Error('no destination given for blueprint instance')
     }
@@ -111,13 +107,13 @@ class Blueprint {
     if (!fs.pathExistsSync(this.filesPath)) {
       throw new Error('blueprint does not exist')
     }
-
+    const mergedData = merge({}, this.config.data, data)
     return fs
       .ensureDir(destination)
       .then(() => {
         scaffold(
           { source: this.filesPath, destination, onlyFiles: false },
-          data
+          mergedData
         )
         // return BlueprintInstance
         return { type: this.name, location: destination, data }

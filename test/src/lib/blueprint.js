@@ -25,7 +25,10 @@ describe('Blueprint', function() {
       location: path.resolve(BLUEPRINTS_DIR, './example')
     })
     return blueprint
-      .generate(path.resolve(TEMP_DIR, './example-instance'), { name: 'Cliff' })
+      .generate({
+        destination: path.resolve(TEMP_DIR, './example-instance'),
+        data: { name: 'Cliff' }
+      })
       .then(blueprintInstance => {
         const instancePath = path.resolve(TEMP_DIR, './example-instance')
         const textfilePath = path.resolve(instancePath, './users/Cliff.txt')
