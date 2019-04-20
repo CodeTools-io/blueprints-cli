@@ -75,12 +75,26 @@ class Blueprint {
     this.config.preGenerate.forEach(configCommand => {
       let command = configCommand
       command = command.replace('<blueprintName>', mergedData.blueprint)
+      command = command.replace('<blueprintPath>', this.location)
       command = command.replace('<instanceName>', mergedData.blueprintInstance)
       command = command.replace(
         '<instancePath>',
         path.resolve(destination, mergedData.blueprintInstance)
       )
-      child_process.exec(command)
+      console.log(`░░░░░░ ${command} ░░░░░░`)
+      child_process.exec(command, (err, stdout, stderr) => {
+        if (err) {
+          console.error(err)
+        }
+
+        if (stdout) {
+          console.log(stdout)
+        }
+
+        if (stderr) {
+          console.error(stderr)
+        }
+      })
     })
   }
 
@@ -90,12 +104,27 @@ class Blueprint {
     this.config.postGenerate.forEach(configCommand => {
       let command = configCommand
       command = command.replace('<blueprintName>', mergedData.blueprint)
+      command = command.replace('<blueprintPath>', this.location)
       command = command.replace('<instanceName>', mergedData.blueprintInstance)
       command = command.replace(
         '<instancePath>',
         path.resolve(destination, mergedData.blueprintInstance)
       )
-      child_process.exec(command)
+
+      console.log(`░░░░░░ ${command} ░░░░░░`)
+      child_process.exec(command, (err, stdout, stderr) => {
+        if (err) {
+          console.error(err)
+        }
+
+        if (stdout) {
+          console.log(stdout)
+        }
+
+        if (stderr) {
+          console.error(stderr)
+        }
+      })
     })
   }
 
