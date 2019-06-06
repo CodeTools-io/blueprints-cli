@@ -29,10 +29,10 @@
   "author": "Cliff Pyles <cliff@cliffpyles.com>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^6.1.3",
-    "nodemon": "^1.17.3",
-    "prettier": "^1.17.0"
+    "chai": "4.2.0",
+    "mocha": "6.1.3",
+    "nodemon": "1.18.11",
+    "prettier": "1.17.0"
   },
   "dependencies": {
     "commander": "^2.15.1",
