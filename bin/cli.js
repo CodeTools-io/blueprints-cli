@@ -116,4 +116,15 @@ cli
       })
   })
 
+cli.on('--help', () => {
+  console.log('')
+  console.group(
+    'Pipes:\n',
+    'ClassFormat (ex. ComponentName)\n',
+    'DashedFormat (ex. component-name)\n',
+    'CamelCaseFormat (ex. componentName)\n',
+    'PascalCaseFormat (ex. ComponentName)\n'
+  )
+})
+
 cli.parse(process.argv)

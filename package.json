@@ -1,6 +1,6 @@
 {
   "name": "@cliffpyles/blueprints-cli",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "A tool for generating predefined files and directories",
   "private": false,
   "main": "index.js",
@@ -30,7 +30,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "4.2.0",
-    "mocha": "6.1.3",
+    "mocha": "^6.2.0",
     "nodemon": "1.18.11",
     "prettier": "1.17.0"
   },
@@ -39,7 +39,7 @@
     "dot-prop": "^5.0.0",
     "fs-extra": "^8.0.0",
     "inflection": "^1.12.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "pkg-dir": "^4.1.0",
     "pkg-up": "^3.1.0",
     "rc": "^1.2.6",
