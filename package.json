@@ -35,7 +35,7 @@
     "prettier": "1.17.0"
   },
   "dependencies": {
-    "commander": "^2.15.1",
+    "commander": "^3.0.0",
     "dot-prop": "^5.0.0",
     "fs-extra": "^8.0.0",
     "inflection": "^1.12.0",
