@@ -2,10 +2,11 @@ const path = require('path')
 const child_process = require('child_process')
 const fs = require('fs-extra')
 const { default: scaffold } = require('scaffold-helper')
-const merge = require('lodash/merge')
+const _ = require('lodash')
+const { merge } = _
 
 class Blueprint {
-  constructor({ name, location, source }) {
+  constructor ({ name, location, source }) {
     this.name = name
     this.location = location
     this.source = source
@@ -23,7 +24,7 @@ class Blueprint {
     }
   }
 
-  remove() {
+  remove () {
     if (!this.name) {
       throw new Error('No name specified')
     }
@@ -43,7 +44,7 @@ class Blueprint {
       })
   }
 
-  save(options) {
+  save (options) {
     if (!this.source) {
       throw new Error('No source specified')
     }
@@ -69,7 +70,7 @@ class Blueprint {
       })
   }
 
-  preGenerate({ destination, data = {} }) {
+  preGenerate ({ destination, data = {} }) {
     const mergedData = merge({}, this.config.data, data)
 
     this.config.preGenerate.forEach(configCommand => {
@@ -82,23 +83,13 @@ class Blueprint {
         path.resolve(destination, mergedData.blueprintInstance)
       )
       console.log(`░░░░░░ ${command} ░░░░░░`)
-      child_process.exec(command, (err, stdout, stderr) => {
-        if (err) {
-          console.error(err)
-        }
+      const preGenerate = require(command)
 
-        if (stdout) {
-          console.log(stdout)
-        }
-
-        if (stderr) {
-          console.error(stderr)
-        }
-      })
+      preGenerate(mergedData, { _, fs })
     })
   }
 
-  postGenerate({ destination, data = {} }) {
+  postGenerate ({ destination, data = {} }) {
     const mergedData = merge({}, this.config.data, data)
 
     this.config.postGenerate.forEach(configCommand => {
@@ -112,23 +103,13 @@ class Blueprint {
       )
 
       console.log(`░░░░░░ ${command} ░░░░░░`)
-      child_process.exec(command, (err, stdout, stderr) => {
-        if (err) {
-          console.error(err)
-        }
+      const postGenerate = require(command)
 
-        if (stdout) {
-          console.log(stdout)
-        }
-
-        if (stderr) {
-          console.error(stderr)
-        }
-      })
+      postGenerate(mergedData, { _, fs })
     })
   }
 
-  generate({ destination, data = {} }) {
+  generate ({ destination, data = {} }) {
     if (!destination) {
       throw new Error('no destination given for blueprint instance')
     }
