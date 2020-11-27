@@ -8,11 +8,15 @@ function getMetadata({ blueprintInstance, blueprint }) {
   data['blueprintInstance_ClassFormat'] = inflection.classify(
     standardBlueprintInstance
   )
-  data['blueprintInstance_dashed-format'] = inflection
-    .dasherize(standardBlueprintInstance)
+  data[
+    'blueprintInstance_dashed-format'
+  ] = inflection
+    .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
     .toLowerCase()
-  data['blueprintInstance_DashedFormat'] = inflection
-    .dasherize(standardBlueprintInstance)
+  data[
+    'blueprintInstance_DashedFormat'
+  ] = inflection
+    .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
     .toLowerCase()
   data['blueprintInstance_slug-format'] =
     data['blueprintInstance_dashed-format']
@@ -31,6 +35,9 @@ function getMetadata({ blueprintInstance, blueprint }) {
   data['blueprintInstance_PascalCaseFormat'] = inflection.camelize(
     standardBlueprintInstance
   )
+  data['blueprintInstance_ConstantFormat'] = inflection
+    .underscore(standardBlueprintInstance)
+    .toUpperCase()
 
   return data
 }

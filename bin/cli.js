@@ -18,7 +18,7 @@ const GLOBAL_BLUEPRINTS_PATH = path.resolve(os.homedir(), './.blueprints')
 
 const app = new App({
   globalPath: GLOBAL_BLUEPRINTS_PATH,
-  projectPath: PROJECT_BLUEPRINTS_PATH
+  projectPath: PROJECT_BLUEPRINTS_PATH,
 })
 
 cli.version(pkg.version)
@@ -34,7 +34,7 @@ cli
     const metadata = getMetadata({ blueprint, blueprintInstance })
     app.generateBlueprintInstance(blueprint, destination, {
       ...data,
-      ...metadata
+      ...metadata,
     })
   })
 
@@ -47,7 +47,7 @@ cli
 
     console.log(`--- Global Blueprints ---`)
     if (blueprints.global && blueprints.global.length) {
-      blueprints.global.forEach(blueprint => {
+      blueprints.global.forEach((blueprint) => {
         console.log(`${blueprint.name} - ${blueprint.location}`)
       })
     } else {
@@ -56,7 +56,7 @@ cli
 
     console.log(`\n--- Project Blueprints ---`)
     if (blueprints.project && blueprints.project.length) {
-      blueprints.project.forEach(blueprint => {
+      blueprints.project.forEach((blueprint) => {
         console.log(`${blueprint.name} - ${blueprint.location}`)
       })
     } else {
@@ -86,10 +86,10 @@ cli
 
     app
       .initializeBlueprint(blueprintName, { source, location })
-      .then(blueprint => {
+      .then((blueprint) => {
         console.log(`${blueprint.name} was created at: ${blueprint.location}`)
       })
-      .catch(err => {
+      .catch((err) => {
         throw err
       })
   })
@@ -108,10 +108,10 @@ cli
 
     app
       .removeBlueprint(blueprintName, { location })
-      .then(blueprint => {
+      .then((blueprint) => {
         console.log(`${blueprint.name} was removed from: ${blueprint.location}`)
       })
-      .catch(err => {
+      .catch((err) => {
         throw err
       })
   })
@@ -123,7 +123,9 @@ cli.on('--help', () => {
     'ClassFormat (ex. ComponentName)\n',
     'DashedFormat (ex. component-name)\n',
     'CamelCaseFormat (ex. componentName)\n',
-    'PascalCaseFormat (ex. ComponentName)\n'
+    'PascalCaseFormat (ex. ComponentName)\n',
+    'SlugFormat (ex. component-name)\n',
+    'ConstantFormat (ex. COMPONENT_NAME)\n'
   )
 })
 
