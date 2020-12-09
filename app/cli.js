@@ -1,27 +1,13 @@
 #!/usr/bin/env node
 
 const pkg = require('../package')
-const path = require('path')
 const cli = require('commander')
-const App = require('./app')
 const create = require('./actions/create')
 const generate = require('./actions/generate')
 const initialize = require('./actions/initialize')
 const list = require('./actions/list')
 const remove = require('./actions/remove')
 const help = require('./actions/help')
-
-const {
-  CURRENT_PATH,
-  CURRENT_DIRNAME,
-  PROJECT_BLUEPRINTS_PATH,
-  GLOBAL_BLUEPRINTS_PATH,
-} = require('./config')
-
-const app = new App({
-  globalPath: GLOBAL_BLUEPRINTS_PATH,
-  projectPath: PROJECT_BLUEPRINTS_PATH,
-})
 
 cli.version(pkg.version)
 
