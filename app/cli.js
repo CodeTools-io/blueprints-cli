@@ -4,6 +4,7 @@ const pkg = require('../package')
 const path = require('path')
 const cli = require('commander')
 const App = require('./app')
+const create = require('./actions/create')
 const generate = require('./actions/generate')
 const list = require('./actions/list')
 
@@ -38,9 +39,7 @@ cli
   .command('new <blueprint>')
   .option('-g, --global', 'Creates the blueprint globally', false)
   .description('Create a generic blueprint')
-  .action((blueprint, options) => {
-    app.createBlueprint(blueprint, options)
-  })
+  .action(create)
 
 cli
   .command('init [blueprint]')
