@@ -4,9 +4,9 @@ const pkg = require('../package')
 const path = require('path')
 const cli = require('commander')
 const App = require('./app')
-const getMetadata = require('./utils/get-metadata')
-const getTemplateData = require('./utils/get-template-data')
 const generate = require('./actions/generate')
+const list = require('./actions/list')
+
 const {
   CURRENT_PATH,
   CURRENT_DIRNAME,
@@ -32,27 +32,7 @@ cli
   .command('list [namespace]')
   .alias('ls')
   .description('List all available blueprints')
-  .action(async function list(namespace = '') {
-    const blueprints = await app.getAllBlueprints(namespace)
-
-    console.log(`--- Global Blueprints ---`)
-    if (blueprints.global && blueprints.global.length) {
-      blueprints.global.forEach((blueprint) => {
-        console.log(`${blueprint.name} - ${blueprint.location}`)
-      })
-    } else {
-      console.log(`no global blueprints found`)
-    }
-
-    console.log(`\n--- Project Blueprints ---`)
-    if (blueprints.project && blueprints.project.length) {
-      blueprints.project.forEach((blueprint) => {
-        console.log(`${blueprint.name} - ${blueprint.location}`)
-      })
-    } else {
-      console.log(`no project blueprints found`)
-    }
-  })
+  .action(list)
 
 cli
   .command('new <blueprint>')
