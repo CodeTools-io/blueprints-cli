@@ -6,7 +6,7 @@ const cli = require('commander')
 const App = require('./app')
 const getMetadata = require('./utils/get-metadata')
 const getTemplateData = require('./utils/get-template-data')
-
+const generate = require('./actions/generate')
 const {
   CURRENT_PATH,
   CURRENT_DIRNAME,
@@ -26,15 +26,7 @@ cli
   .option('-d, --dest <destination>', 'Which directory to place the files')
   .alias('g')
   .description('Generate files with a blueprint')
-  .action(function generate(blueprint, blueprintInstance, options) {
-    const destination = options.dest || CURRENT_PATH
-    const data = getTemplateData(process.argv.slice(4))
-    const metadata = getMetadata({ blueprint, blueprintInstance })
-    app.generateBlueprintInstance(blueprint, destination, {
-      ...data,
-      ...metadata,
-    })
-  })
+  .action(generate)
 
 cli
   .command('list [namespace]')
