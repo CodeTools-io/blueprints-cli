@@ -9,6 +9,7 @@ const generate = require('./actions/generate')
 const initialize = require('./actions/initialize')
 const list = require('./actions/list')
 const remove = require('./actions/remove')
+const help = require('./actions/help')
 
 const {
   CURRENT_PATH,
@@ -56,17 +57,6 @@ cli
   .description('Removes a blueprint')
   .action(remove)
 
-cli.on('--help', () => {
-  console.log('')
-  console.group(
-    'Pipes:\n',
-    'ClassFormat (ex. ComponentName)\n',
-    'DashedFormat (ex. component-name)\n',
-    'CamelCaseFormat (ex. componentName)\n',
-    'PascalCaseFormat (ex. ComponentName)\n',
-    'SlugFormat (ex. component-name)\n',
-    'ConstantFormat (ex. COMPONENT_NAME)\n'
-  )
-})
+cli.on('--help', help)
 
 cli.parse(process.argv)
