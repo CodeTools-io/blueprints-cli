@@ -9,7 +9,7 @@
     "url": "https://github.com/cliffpyles/blueprints-cli"
   },
   "bin": {
-    "bp": "./bin/cli.js"
+    "bp": "./app/cli.js"
   },
   "scripts": {
     "postinstall": "mkdir -p ~/.blueprints",

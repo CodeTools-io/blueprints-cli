@@ -6,9 +6,9 @@ const path = require('path')
 const cli = require('commander')
 const pkgDir = require('pkg-dir')
 
-const App = require('../src/app')
-const getMetadata = require('../src/utils/get-metadata')
-const getTemplateData = require('../src/utils/get-template-data')
+const App = require('./app')
+const getMetadata = require('./utils/get-metadata')
+const getTemplateData = require('./utils/get-template-data')
 
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
