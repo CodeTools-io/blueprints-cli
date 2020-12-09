@@ -1,20 +1,18 @@
 #!/usr/bin/env node
 
 const pkg = require('../package')
-const os = require('os')
 const path = require('path')
 const cli = require('commander')
-const pkgDir = require('pkg-dir')
-
 const App = require('./app')
 const getMetadata = require('./utils/get-metadata')
 const getTemplateData = require('./utils/get-template-data')
 
-const CURRENT_PATH = process.cwd()
-const CURRENT_DIRNAME = path.basename(process.cwd())
-const PROJECT_ROOT_PATH = pkgDir.sync() || CURRENT_PATH
-const PROJECT_BLUEPRINTS_PATH = path.resolve(PROJECT_ROOT_PATH, './.blueprints')
-const GLOBAL_BLUEPRINTS_PATH = path.resolve(os.homedir(), './.blueprints')
+const {
+  CURRENT_PATH,
+  CURRENT_DIRNAME,
+  PROJECT_BLUEPRINTS_PATH,
+  GLOBAL_BLUEPRINTS_PATH,
+} = require('./config')
 
 const app = new App({
   globalPath: GLOBAL_BLUEPRINTS_PATH,
