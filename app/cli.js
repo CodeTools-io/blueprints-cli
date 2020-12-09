@@ -8,6 +8,7 @@ const create = require('./actions/create')
 const generate = require('./actions/generate')
 const initialize = require('./actions/initialize')
 const list = require('./actions/list')
+const remove = require('./actions/remove')
 
 const {
   CURRENT_PATH,
@@ -53,22 +54,7 @@ cli
   .alias('rm')
   .option('-g, --global', 'Removes the global blueprint')
   .description('Removes a blueprint')
-  .action(function remove(blueprint, options) {
-    const blueprintName = blueprint
-    const isGlobal = options.global || false
-    const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
-    const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
-    const location = isGlobal ? globalLocation : projectLocation
-
-    app
-      .removeBlueprint(blueprintName, { location })
-      .then((blueprint) => {
-        console.log(`${blueprint.name} was removed from: ${blueprint.location}`)
-      })
-      .catch((err) => {
-        throw err
-      })
-  })
+  .action(remove)
 
 cli.on('--help', () => {
   console.log('')
