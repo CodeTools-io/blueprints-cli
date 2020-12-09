@@ -6,6 +6,7 @@ const cli = require('commander')
 const App = require('./app')
 const create = require('./actions/create')
 const generate = require('./actions/generate')
+const initialize = require('./actions/initialize')
 const list = require('./actions/list')
 
 const {
@@ -45,23 +46,7 @@ cli
   .command('init [blueprint]')
   .option('-g, --global', 'Creates the blueprint globally')
   .description('Create blueprint with contents of current directory')
-  .action(function initialize(blueprint, options) {
-    const blueprintName = blueprint || CURRENT_DIRNAME
-    const isGlobal = options.global || false
-    const source = CURRENT_PATH
-    const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
-    const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
-    const location = isGlobal ? globalLocation : projectLocation
-
-    app
-      .initializeBlueprint(blueprintName, { source, location })
-      .then((blueprint) => {
-        console.log(`${blueprint.name} was created at: ${blueprint.location}`)
-      })
-      .catch((err) => {
-        throw err
-      })
-  })
+  .action(initialize)
 
 cli
   .command('remove <blueprint>')
