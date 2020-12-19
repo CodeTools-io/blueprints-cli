@@ -6,7 +6,7 @@ const _ = require('lodash')
 const { merge } = _
 
 class Blueprint {
-  constructor ({ name, location, source }) {
+  constructor({ name, location, source }) {
     this.name = name
     this.location = location
     this.source = source
@@ -15,7 +15,7 @@ class Blueprint {
     this.config = {
       preGenerate: [],
       postGenerate: [],
-      data: {}
+      data: {},
     }
 
     if (fs.pathExistsSync(this.configPath)) {
@@ -24,7 +24,7 @@ class Blueprint {
     }
   }
 
-  remove () {
+  remove() {
     if (!this.name) {
       throw new Error('No name specified')
     }
@@ -39,12 +39,12 @@ class Blueprint {
       .then(() => {
         return this
       })
-      .catch(err => {
+      .catch((err) => {
         throw err
       })
   }
 
-  save (options) {
+  save(options) {
     if (!this.source) {
       throw new Error('No source specified')
     }
@@ -58,22 +58,22 @@ class Blueprint {
           {
             source: this.source,
             destination: this.filesPath,
-            onlyFiles: false
+            onlyFiles: false,
           },
           {}
         )
 
         return this
       })
-      .catch(err => {
+      .catch((err) => {
         throw err
       })
   }
 
-  preGenerate ({ destination, data = {} }) {
+  preGenerate({ destination, data = {} }) {
     const mergedData = merge({}, this.config.data, data)
 
-    this.config.preGenerate.forEach(configCommand => {
+    this.config.preGenerate.forEach((configCommand) => {
       let command = configCommand
       command = command.replace('<blueprintName>', mergedData.blueprint)
       command = command.replace('<blueprintPath>', this.location)
@@ -89,10 +89,10 @@ class Blueprint {
     })
   }
 
-  postGenerate ({ destination, data = {} }) {
+  postGenerate({ destination, data = {} }) {
     const mergedData = merge({}, this.config.data, data)
 
-    this.config.postGenerate.forEach(configCommand => {
+    this.config.postGenerate.forEach((configCommand) => {
       let command = configCommand
       command = command.replace('<blueprintName>', mergedData.blueprint)
       command = command.replace('<blueprintPath>', this.location)
@@ -109,7 +109,7 @@ class Blueprint {
     })
   }
 
-  generate ({ destination, data = {} }) {
+  generate({ destination, data = {} }) {
     if (!destination) {
       throw new Error('no destination given for blueprint instance')
     }
@@ -128,7 +128,7 @@ class Blueprint {
         // return BlueprintInstance
         return { type: this.name, location: destination, data }
       })
-      .catch(err => {
+      .catch((err) => {
         throw err
       })
   }
