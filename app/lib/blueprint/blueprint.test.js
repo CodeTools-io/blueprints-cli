@@ -23,8 +23,8 @@ describe('blueprint', () => {
   test('can merge config into new instances', () => {
     const params = {
       name: 'example2',
-      source: path.resolve(__dirname, './__mocks__/example_with_config/source'),
-      location: path.resolve(__dirname, './__mocks__/example_with_config'),
+      source: path.resolve(__dirname, './__mocks__/example/source'),
+      location: path.resolve(__dirname, './__mocks__/example'),
     }
     const result = new Blueprint(params)
 
