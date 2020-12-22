@@ -1,10 +1,14 @@
 const path = require('path')
 const os = require('os')
 const pkgDir = require('pkg-dir')
+const findUp = require('find-up')
+
 const CURRENT_PATH = process.cwd()
 const CURRENT_DIRNAME = path.basename(process.cwd())
-const PROJECT_ROOT_PATH = pkgDir.sync() || CURRENT_PATH
-const PROJECT_BLUEPRINTS_PATH = path.resolve(PROJECT_ROOT_PATH, './.blueprints')
+const PROJECT_BLUEPRINTS_PATH = findUp.sync('.blueprints', {
+  type: 'directory',
+})
+const PROJECT_ROOT_PATH = path.resolve(PROJECT_BLUEPRINTS_PATH, '../')
 const GLOBAL_BLUEPRINTS_PATH = path.resolve(os.homedir(), './.blueprints')
 
 module.exports = {
