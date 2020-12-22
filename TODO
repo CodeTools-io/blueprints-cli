@@ -18,4 +18,5 @@ Todo:
   ☐ add support for blueprints settings in projects
   ✔ add ability to execute arbitrary shell commands after and before generation
   ☐ add support for importing global blueprints to local (for starting)
+  ☐ add support timestamps in metadata (and maybe different formats of the timestamp)
 
