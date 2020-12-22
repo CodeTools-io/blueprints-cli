@@ -11,40 +11,6 @@ class App {
     this.globalPath = globalPath
   }
 
-  createBlueprint(blueprintName, options) {
-    if (!blueprintName) {
-      throw new Error('requires a name')
-    }
-
-    const blueprintPath = options.global
-      ? path.resolve(this.globalPath, blueprintName)
-      : path.resolve(this.projectPath, `./.blueprints/${blueprintName}`)
-
-    if (fs.pathExistsSync(blueprintPath)) {
-      throw new Error(`A blueprint called ${blueprintName} already exists`)
-    }
-
-    return Promise.all([
-      fs.ensureDir(
-        path.resolve(blueprintPath, './files/__blueprintInstance__')
-      ),
-      fs.outputJson(
-        path.resolve(blueprintPath, './blueprint.json'),
-        {},
-        { space: 2 }
-      ),
-    ])
-      .then(() => {
-        console.log(`${blueprintName} was created at ${blueprintPath}`)
-      })
-      .catch((err) => {
-        console.error(err)
-        fs.remove(path.resolve(blueprintPath)).catch((rmError) => {
-          console.error(rmError)
-        })
-      })
-  }
-
   initializeBlueprint(blueprintName, { location, source }) {
     if (!blueprintName) {
       throw new Error('requires a blueprint name')
