@@ -18,7 +18,7 @@ class App {
 
     const blueprintPath = options.global
       ? path.resolve(this.globalPath, blueprintName)
-      : path.resolve(process.cwd(), `./.blueprints/${blueprintName}`)
+      : path.resolve(this.projectPath, `./.blueprints/${blueprintName}`)
 
     if (fs.pathExistsSync(blueprintPath)) {
       throw new Error(`A blueprint called ${blueprintName} already exists`)
@@ -32,22 +32,22 @@ class App {
         path.resolve(blueprintPath, './blueprint.json'),
         {},
         { space: 2 }
-      )
+      ),
     ])
       .then(() => {
         console.log(`${blueprintName} was created at ${blueprintPath}`)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err)
-        fs.remove(path.resolve(blueprintPath)).catch(rmError => {
+        fs.remove(path.resolve(blueprintPath)).catch((rmError) => {
           console.error(rmError)
         })
       })
   }
 
-  initializeBlueprint(name, { location, source }) {
-    if (!name) {
-      throw new Error('requires a name')
+  initializeBlueprint(blueprintName, { location, source }) {
+    if (!blueprintName) {
+      throw new Error('requires a blueprint name')
     }
     if (!location) {
       throw new Error('requires a location')
@@ -56,13 +56,32 @@ class App {
       throw new Error('requires a source')
     }
 
-    const blueprint = new Blueprint({
-      name: name,
-      location: location,
-      source: source
-    })
+    if (fs.pathExistsSync(location)) {
+      throw new Error(`A blueprint called ${blueprintName} already exists`)
+    }
 
-    return blueprint.save()
+    return Promise.all([
+      // fs.ensureDir(path.resolve(location, './files/__blueprintInstance__')),
+      fs.outputJson(
+        path.resolve(location, './blueprint.json'),
+        {},
+        { space: 2 }
+      ),
+      fs.copy(source, path.resolve(location, './files/__blueprintInstance__')),
+    ])
+      .then(() => {
+        return new Blueprint({
+          name: blueprintName,
+          location,
+          source: source,
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+        fs.remove(path.resolve(location)).catch((rmError) => {
+          console.error(rmError)
+        })
+      })
   }
 
   removeBlueprint(name, { location }) {
@@ -75,7 +94,7 @@ class App {
 
     const blueprint = new Blueprint({
       name: name,
-      location: location
+      location: location,
     })
 
     return blueprint.remove()
@@ -90,7 +109,7 @@ class App {
     }
     const blueprint = new Blueprint({
       name,
-      location: this.getBlueprintPath(name)
+      location: this.getBlueprintPath(name),
     })
 
     await blueprint.preGenerate({ destination, data })
@@ -138,7 +157,7 @@ class App {
           accum.push(
             new Blueprint({
               name: blueprint,
-              location
+              location,
             })
           )
         }
@@ -152,13 +171,13 @@ class App {
           accum.push(
             new Blueprint({
               name: blueprint,
-              location
+              location,
             })
           )
         }
 
         return accum
-      }, [])
+      }, []),
     }
   }
 }

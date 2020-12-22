@@ -26,6 +26,6 @@ module.exports = function initialize(blueprint, options) {
       console.log(`${blueprint.name} was created at: ${blueprint.location}`)
     })
     .catch((err) => {
-      throw err
+      console.error(err)
     })
 }
