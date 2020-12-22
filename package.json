@@ -13,8 +13,8 @@
   },
   "scripts": {
     "postinstall": "mkdir -p ~/.blueprints",
-    "test": "jest --watch",
-    "test:watch": "nodemon --watch 'test' --watch 'app' --exec 'npm test'"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [
     "node",
