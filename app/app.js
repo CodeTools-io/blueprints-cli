@@ -1,6 +1,4 @@
-const os = require('os')
 const path = require('path')
-
 const fs = require('fs-extra')
 
 const Blueprint = require('./lib/blueprint')
@@ -9,45 +7,6 @@ class App {
   constructor({ globalPath, projectPath }) {
     this.projectPath = projectPath
     this.globalPath = globalPath
-  }
-
-  initializeBlueprint(blueprintName, { location, source }) {
-    if (!blueprintName) {
-      throw new Error('requires a blueprint name')
-    }
-    if (!location) {
-      throw new Error('requires a location')
-    }
-    if (!source) {
-      throw new Error('requires a source')
-    }
-
-    if (fs.pathExistsSync(location)) {
-      throw new Error(`A blueprint called ${blueprintName} already exists`)
-    }
-
-    return Promise.all([
-      // fs.ensureDir(path.resolve(location, './files/__blueprintInstance__')),
-      fs.outputJson(
-        path.resolve(location, './blueprint.json'),
-        {},
-        { space: 2 }
-      ),
-      fs.copy(source, path.resolve(location, './files/__blueprintInstance__')),
-    ])
-      .then(() => {
-        return new Blueprint({
-          name: blueprintName,
-          location,
-          source: source,
-        })
-      })
-      .catch((err) => {
-        console.error(err)
-        fs.remove(path.resolve(location)).catch((rmError) => {
-          console.error(rmError)
-        })
-      })
   }
 
   removeBlueprint(name, { location }) {
