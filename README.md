@@ -27,6 +27,12 @@ Place files you want to reuse in `~/.blueprints/ExampleBlueprint/files/`
 **Use the blueprint**
 Go to desired project folder and run `bp generate ExampleBlueprint MyInstance`
 
+## How it Works
+
+Blueprints use the same global and local concept as node modules. To modify your global blueprints go to `~/.blueprints`. To modify your project blueprints go to `your/project/path/.blueprints`.
+
+When generating blueprint instances, the tool will first look in your project blueprints. If a project blueprint isn't found, the tool will look in your global blueprints.
+
 ## Commands
 
 `generate|g [options] <blueprint> <blueprintInstance>` Generate files with a blueprint
@@ -42,12 +48,6 @@ Go to desired project folder and run `bp generate ExampleBlueprint MyInstance`
 `remove|rm [options] <blueprint>` Removes a blueprint
 
 `help [command]` display help for command
-
-## How it Works
-
-Blueprints use the same global and local concept as node modules. To modify your global blueprints go to `~/.blueprints`. To modify your project blueprints go to `your/project/path/.blueprints`.
-
-When generating blueprint instances, the tool will first look in your project blueprints. If a project blueprint isn't found, the tool will look in your global blueprints.
 
 ## Blueprint Structure
 
