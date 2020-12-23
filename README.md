@@ -19,12 +19,15 @@ or
 ## Quick Start
 
 **Create a blueprint**
+
 `bp new -g ExampleBlueprint`
 
 **Configure the blueprint**
+
 Place files you want to reuse in `~/.blueprints/ExampleBlueprint/files/`
 
 **Use the blueprint**
+
 Go to desired project folder and run `bp generate ExampleBlueprint MyInstance`
 
 ## How it Works
