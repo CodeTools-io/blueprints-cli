@@ -25,37 +25,6 @@ class App {
     return blueprint.remove()
   }
 
-  async generateBlueprintInstance(name, destination, data = {}) {
-    if (!name) {
-      throw new Error('requires a name')
-    }
-    if (!destination) {
-      throw new Error('requires a destination')
-    }
-    const blueprint = new Blueprint({
-      name,
-      location: this.getBlueprintPath(name),
-    })
-
-    await blueprint.preGenerate({ destination, data })
-    await blueprint.generate({ destination, data })
-    await blueprint.postGenerate({ destination, data })
-  }
-
-  getBlueprintPath(name) {
-    const globalBlueprintPath = path.resolve(this.globalPath, `./${name}`)
-    const projectBlueprintPath = path.resolve(this.projectPath, `./${name}`)
-    if (fs.pathExistsSync(projectBlueprintPath)) {
-      return projectBlueprintPath
-    }
-
-    if (fs.pathExistsSync(globalBlueprintPath)) {
-      return globalBlueprintPath
-    }
-
-    throw new Error('Blueprint not found')
-  }
-
   async getAllBlueprints(namespace = '') {
     const globalBlueprintsPath = path.resolve(this.globalPath, namespace)
     const projectBlueprintsPath = path.resolve(this.projectPath, namespace)
