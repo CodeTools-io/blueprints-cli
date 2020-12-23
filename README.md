@@ -49,6 +49,8 @@ Blueprints use the same global and local concept as node modules. To modify your
 
 When generating blueprint instances, the tool will first look in your project blueprints. If a project blueprint isn't found, the tool will look in your global blueprints.
 
+## Blueprint Structure
+
 ```
 blueprint.json - An optional file for modifying the behavior and setting default blueprint data
 files/ - Location of files that will be copied when blueprint instances are generated.
