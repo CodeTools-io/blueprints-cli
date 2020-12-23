@@ -4,6 +4,7 @@ const pkg = require('../package')
 const cli = require('commander')
 const create = require('./actions/create')
 const generate = require('./actions/generate')
+const _import = require('./actions/import')
 const initialize = require('./actions/initialize')
 const list = require('./actions/list')
 const remove = require('./actions/remove')
@@ -29,6 +30,11 @@ cli
   .option('-g, --global', 'Creates the blueprint globally', false)
   .description('Create a generic blueprint')
   .action(create)
+
+cli
+  .command('import <globalBlueprint> [localBlueprint]')
+  .description('Create a project blueprint based on a global blueprint')
+  .action(_import)
 
 cli
   .command('init [blueprint]')
