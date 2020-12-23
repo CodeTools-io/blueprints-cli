@@ -1,27 +1,27 @@
 const path = require('path')
-const App = require('../../app')
+const Blueprint = require('../../lib/Blueprint')
 
 const {
   PROJECT_BLUEPRINTS_PATH,
   GLOBAL_BLUEPRINTS_PATH,
 } = require('../../config')
-module.exports = function remove(blueprint, options) {
-  const app = new App({
-    globalPath: GLOBAL_BLUEPRINTS_PATH,
-    projectPath: PROJECT_BLUEPRINTS_PATH,
-  })
-  const blueprintName = blueprint
-  const isGlobal = options.global || false
-  const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
-  const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
-  const location = isGlobal ? globalLocation : projectLocation
 
-  app
-    .removeBlueprint(blueprintName, { location })
-    .then((blueprint) => {
-      console.log(`${blueprint.name} was removed from: ${blueprint.location}`)
+module.exports = async function remove(blueprintName, options) {
+  try {
+    const isGlobal = options.global || false
+    const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
+    const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
+    const location = isGlobal ? globalLocation : projectLocation
+
+    const blueprint = new Blueprint({
+      name: blueprintName,
+      location: location,
     })
-    .catch((err) => {
-      throw err
-    })
+
+    await blueprint.remove()
+
+    console.log(`${blueprintName} was removed from: ${location}`)
+  } catch (err) {
+    console.error(err)
+  }
 }

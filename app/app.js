@@ -9,22 +9,6 @@ class App {
     this.globalPath = globalPath
   }
 
-  removeBlueprint(name, { location }) {
-    if (!name) {
-      throw new Error('requires a name')
-    }
-    if (!location) {
-      throw new Error('requires a location')
-    }
-
-    const blueprint = new Blueprint({
-      name: name,
-      location: location,
-    })
-
-    return blueprint.remove()
-  }
-
   async getAllBlueprints(namespace = '') {
     const globalBlueprintsPath = path.resolve(this.globalPath, namespace)
     const projectBlueprintsPath = path.resolve(this.projectPath, namespace)
