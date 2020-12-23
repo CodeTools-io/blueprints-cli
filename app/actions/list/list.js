@@ -1,4 +1,7 @@
-const App = require('../../app')
+const path = require('path')
+const fs = require('fs-extra')
+
+const Blueprint = require('../../lib/Blueprint')
 
 const {
   PROJECT_BLUEPRINTS_PATH,
@@ -6,27 +9,85 @@ const {
 } = require('../../config')
 
 module.exports = async function list(namespace = '') {
-  const app = new App({
-    globalPath: GLOBAL_BLUEPRINTS_PATH,
-    projectPath: PROJECT_BLUEPRINTS_PATH,
-  })
-  const blueprints = await app.getAllBlueprints(namespace)
+  try {
+    const blueprints = await getAllBlueprints(namespace)
 
-  console.log(`--- Global Blueprints ---`)
-  if (blueprints.global && blueprints.global.length) {
-    blueprints.global.forEach((blueprint) => {
-      console.log(`${blueprint.name} - ${blueprint.location}`)
-    })
-  } else {
-    console.log(`no global blueprints found`)
-  }
+    console.log(`--- Global Blueprints ---`)
+    if (blueprints.global && blueprints.global.length) {
+      blueprints.global.forEach((blueprint) => {
+        console.log(`${blueprint.name} - ${blueprint.location}`)
+      })
+    } else {
+      console.log(`no global blueprints found`)
+    }
 
-  console.log(`\n--- Project Blueprints ---`)
-  if (blueprints.project && blueprints.project.length) {
-    blueprints.project.forEach((blueprint) => {
-      console.log(`${blueprint.name} - ${blueprint.location}`)
-    })
-  } else {
-    console.log(`no project blueprints found`)
+    console.log(`\n--- Project Blueprints ---`)
+    if (blueprints.project && blueprints.project.length) {
+      blueprints.project.forEach((blueprint) => {
+        console.log(`${blueprint.name} - ${blueprint.location}`)
+      })
+    } else {
+      console.log(`no project blueprints found`)
+    }
+
+    async function getAllBlueprints(namespace = '') {
+      const globalBlueprintsPath = path.resolve(
+        GLOBAL_BLUEPRINTS_PATH,
+        namespace
+      )
+      const projectBlueprintsPath = path.resolve(
+        PROJECT_BLUEPRINTS_PATH,
+        namespace
+      )
+      const globalBlueprintsPathExists = await fs.pathExists(
+        globalBlueprintsPath
+      )
+      const projectBlueprintsPathExists = await fs.pathExists(
+        projectBlueprintsPath
+      )
+      let globalBlueprints = []
+      let projectBlueprints = []
+
+      if (globalBlueprintsPathExists) {
+        globalBlueprints = await fs.readdir(globalBlueprintsPath, 'utf8')
+      }
+
+      if (projectBlueprintsPathExists) {
+        projectBlueprints = await fs.readdir(projectBlueprintsPath, 'utf8')
+      }
+
+      return {
+        global: globalBlueprints.reduce((accum, blueprint) => {
+          const location = path.resolve(globalBlueprintsPath, `./${blueprint}`)
+
+          if (fs.statSync(location).isDirectory()) {
+            accum.push(
+              new Blueprint({
+                name: blueprint,
+                location,
+              })
+            )
+          }
+
+          return accum
+        }, []),
+        project: projectBlueprints.reduce((accum, blueprint) => {
+          const location = path.resolve(projectBlueprintsPath, `./${blueprint}`)
+
+          if (fs.statSync(location).isDirectory()) {
+            accum.push(
+              new Blueprint({
+                name: blueprint,
+                location,
+              })
+            )
+          }
+
+          return accum
+        }, []),
+      }
+    }
+  } catch (err) {
+    console.error(err)
   }
 }
