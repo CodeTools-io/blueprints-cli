@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
-const getMetadata = require('../../utils/get-metadata')
+const getMetadata = require('../../utils/getMetadata')
 const getTemplateData = require('../../utils/get-template-data')
 const Blueprint = require('../../lib/Blueprint')
 
