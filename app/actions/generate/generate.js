@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const getMetadata = require('../../utils/getMetadata')
-const getTemplateData = require('../../utils/get-template-data')
+const getTemplateData = require('../../utils/getTemplateData')
 const Blueprint = require('../../lib/Blueprint')
 
 const {
@@ -13,11 +13,11 @@ const {
 module.exports = async function generate(
   blueprintName,
   blueprintInstance,
-  options
+  command
 ) {
   try {
-    const destination = options.dest || CURRENT_PATH
-    const data = getTemplateData(process.argv.slice(4))
+    const destination = command.dest || CURRENT_PATH
+    const data = getTemplateData(command.args.slice(2))
     const metadata = getMetadata({
       blueprint: blueprintName,
       blueprintInstance,
