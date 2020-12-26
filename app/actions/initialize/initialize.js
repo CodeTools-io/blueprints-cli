@@ -8,29 +8,14 @@ const {
   GLOBAL_BLUEPRINTS_PATH,
 } = require('../../config')
 
-module.exports = function initialize(blueprint, options) {
-  const blueprintName = blueprint || CURRENT_DIRNAME
-  const isGlobal = options.global || false
-  const source = CURRENT_PATH
-  const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
-  const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
-  const location = isGlobal ? globalLocation : projectLocation
+module.exports = async function initialize(projectPath, command) {
+  const projectBlueprintsPath = projectPath
+    ? path.resolve(projectPath, './.blueprints')
+    : path.resolve('./.blueprints')
 
-  if (fs.pathExistsSync(location)) {
-    throw new Error(`A blueprint called ${blueprintName} already exists`)
-  }
+  await fs.ensureDir(projectBlueprintsPath)
 
-  return Promise.all([
-    fs.outputJson(path.resolve(location, './blueprint.json'), {}, { space: 2 }),
-    fs.copy(source, path.resolve(location, './files/__blueprintInstance__')),
-  ])
-    .then(() => {
-      console.log(`${blueprintName} was created at: ${location}`)
-    })
-    .catch((err) => {
-      console.error(err)
-      fs.remove(path.resolve(location)).catch((rmError) => {
-        console.error(rmError)
-      })
-    })
+  console.log(
+    `Project initialized. Blueprints can now be added to ${projectBlueprintsPath}`
+  )
 }

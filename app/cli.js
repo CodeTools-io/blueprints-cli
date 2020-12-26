@@ -42,10 +42,8 @@ cli
   .action(_import)
 
 cli
-  .command('initialize [blueprint]')
-  .alias('init')
-  .option('-g, --global', 'Creates the blueprint globally')
-  .description('Create blueprint with contents of current directory')
+  .command('init [projectPath]')
+  .description('Initialize a local blueprints-cli project')
   .action(initialize)
 
 cli
