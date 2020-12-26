@@ -28,7 +28,12 @@ cli
 cli
   .command('new <blueprint>')
   .option('-g, --global', 'Creates the blueprint globally', false)
-  .description('Create a generic blueprint')
+  .option(
+    '-s, --source [sourcePath]',
+    'Path to use for initial blueprint files',
+    false
+  )
+  .description('Create a blueprint')
   .action(create)
 
 cli
@@ -37,7 +42,8 @@ cli
   .action(_import)
 
 cli
-  .command('init [blueprint]')
+  .command('initialize [blueprint]')
+  .alias('init')
   .option('-g, --global', 'Creates the blueprint globally')
   .description('Create blueprint with contents of current directory')
   .action(initialize)
