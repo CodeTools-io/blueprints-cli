@@ -43,7 +43,7 @@ cli
 
 cli
   .command('init [projectPath]')
-  .description('Initialize a local blueprints-cli project')
+  .description('Initialize a local blueprints project')
   .action(initialize)
 
 cli

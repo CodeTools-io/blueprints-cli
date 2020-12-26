@@ -28,7 +28,7 @@ Place files you want to reuse in `~/.blueprints/ExampleBlueprint/files/`
 
 **3) Use the blueprint**
 
-Go to desired project folder and run `bp generate ExampleBlueprint MyInstance`
+Go to the desired folder and run `bp generate ExampleBlueprint MyInstance`
 
 ## Commands
 
@@ -36,13 +36,13 @@ Go to desired project folder and run `bp generate ExampleBlueprint MyInstance`
 
 `list|ls [namespace]` List all available blueprints
 
-`new [options] <blueprint>` Create a generic blueprint
+`new [options] <blueprint>` Create a blueprint
 
 `import <globalBlueprint> [localBlueprint]` Create a project blueprint based on a global blueprint
 
-`init [options] [blueprint]` Create blueprint with contents of current directory
+`init [projectPath]` Initialize a local blueprints project
 
-`remove|rm [options] <blueprint>` Removes a blueprint
+`remove|rm [options] <blueprint>` Remove a blueprint
 
 `help [command]` display help for command
 
