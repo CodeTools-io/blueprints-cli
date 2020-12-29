@@ -15,6 +15,9 @@ log.error = function (value) {
 }
 
 log.output = function () {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(queue.join('\n'))
+  }
   return queue.join('\n')
 }
 

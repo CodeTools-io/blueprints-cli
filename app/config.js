@@ -1,6 +1,5 @@
 const path = require('path')
 const os = require('os')
-const pkgDir = require('pkg-dir')
 const findUp = require('find-up')
 
 const CURRENT_PATH = process.cwd()

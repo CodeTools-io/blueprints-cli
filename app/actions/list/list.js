@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 
 const Blueprint = require('../../lib/Blueprint')
+const log = require('../../utils/log')
 
 const {
   PROJECT_BLUEPRINTS_PATH,
@@ -10,24 +11,25 @@ const {
 
 module.exports = async function list(namespace = '') {
   try {
+    log.clear()
     const blueprints = await getAllBlueprints(namespace)
 
-    console.log(`--- Global Blueprints ---`)
+    log(`--- Global Blueprints ---`)
     if (blueprints.global && blueprints.global.length) {
       blueprints.global.forEach((blueprint) => {
-        console.log(`${blueprint.name} - ${blueprint.location}`)
+        log(`${blueprint.name} - ${blueprint.location}`)
       })
     } else {
-      console.log(`no global blueprints found`)
+      log(`no global blueprints found`)
     }
 
-    console.log(`\n--- Project Blueprints ---`)
+    log(`\n--- Project Blueprints ---`)
     if (blueprints.project && blueprints.project.length) {
       blueprints.project.forEach((blueprint) => {
-        console.log(`${blueprint.name} - ${blueprint.location}`)
+        log(`${blueprint.name} - ${blueprint.location}`)
       })
     } else {
-      console.log(`no project blueprints found`)
+      log(`no project blueprints found`)
     }
 
     async function getAllBlueprints(namespace = '') {
@@ -87,7 +89,9 @@ module.exports = async function list(namespace = '') {
         }, []),
       }
     }
+
+    return log.output()
   } catch (err) {
-    console.error(err)
+    log.error(err)
   }
 }
