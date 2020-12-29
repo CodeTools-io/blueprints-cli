@@ -1,6 +1,8 @@
+const log = require('../../utils/log')
 module.exports = function help() {
-  console.log('')
-  console.group(
+  log.clear()
+  log('')
+  log(
     'Pipes:\n',
     'ClassFormat (ex. ComponentName)\n',
     'DashedFormat (ex. component-name)\n',
@@ -9,4 +11,5 @@ module.exports = function help() {
     'SlugFormat (ex. component-name)\n',
     'ConstantFormat (ex. COMPONENT_NAME)\n'
   )
+  return log.output()
 }

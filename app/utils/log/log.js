@@ -1,7 +1,7 @@
 let queue = []
 
-function log(value) {
-  queue = [...queue, value]
+function log(...value) {
+  queue = [...queue, ...value]
 
   return queue
 }
