@@ -1,7 +1,0 @@
-{
-  "name": "example_with_config",
-  "description": "Example of a blueprint with config for testing",
-  "data": {
-    "working": true
-  }
-}
