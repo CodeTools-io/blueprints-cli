@@ -29,7 +29,7 @@ module.exports = async function _import(
       location,
     })
 
-    await blueprint.save()
+    await blueprint.create()
 
     console.log(`${globalBlueprintName} was imported to ${location}`)
   } catch (err) {

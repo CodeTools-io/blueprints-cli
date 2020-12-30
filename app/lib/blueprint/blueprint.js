@@ -44,7 +44,7 @@ class Blueprint {
       })
   }
 
-  save(options) {
+  create(options) {
     if (!this.source) {
       throw new Error('No source specified')
     }
