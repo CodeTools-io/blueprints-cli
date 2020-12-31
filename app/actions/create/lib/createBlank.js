@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 
 const { PROJECT_ROOT_PATH, GLOBAL_BLUEPRINTS_PATH } = require('../../../config')
 
-module.exports = function createBlank(blueprintName, options) {
+module.exports = function createBlank(blueprintName, options = {}) {
   if (!blueprintName) {
     throw new Error('requires a name')
   }
@@ -27,6 +27,10 @@ module.exports = function createBlank(blueprintName, options) {
   ])
     .then(() => {
       console.log(`${blueprintName} was created at ${blueprintPath}`)
+      return {
+        name: blueprintName,
+        location: blueprintPath,
+      }
     })
     .catch((err) => {
       console.error(err)
