@@ -1,6 +1,6 @@
 # blueprints-cli
 
-**(work in progress. api, features, and conventions are likely to change)**
+**(work in progress. USE AT OWN RISK. api, features, and conventions are likely to change)**
 
 **(docs not complete)**
 
