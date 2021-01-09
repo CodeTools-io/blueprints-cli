@@ -1,6 +1,6 @@
 {
   "name": "@cliffpyles/blueprints-cli",
-  "version": "1.14.0",
+  "version": "1.14.1",
   "description": "A tool for generating predefined files and directories",
   "private": false,
   "main": "index.js",
