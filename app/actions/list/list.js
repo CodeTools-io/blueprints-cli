@@ -89,7 +89,7 @@ module.exports = async function list(namespace = '') {
         }, []),
       }
     }
-
+    this.output = log.output()
     return log.output()
   } catch (err) {
     log.error(err)
