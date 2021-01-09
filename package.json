@@ -29,7 +29,7 @@
   "author": "Cliff Pyles <cliff@cliffpyles.com>",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^26.6.3",
+    "jest": "26.6.3",
     "prettier": "2.1.2"
   },
   "dependencies": {
