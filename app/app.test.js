@@ -1,5 +1,9 @@
 const app = require('./app')
 const fs = require('fs-extra')
+const fsp = require('fs-extra').promises
+const os = require('os')
+const path = require('path')
+
 async function run(userInput) {
   const args = userInput.split(' ')
   const [commandName] = args
@@ -16,14 +20,40 @@ afterEach(async () => {
 })
 describe('app', () => {
   describe('list', () => {
-    test('can list blueprints', async () => {
+    test('can show global blueprints', async () => {
       const { output } = await run('list')
+      const globalPath = path.resolve(os.homedir(), './.blueprints')
+      const directoryContents = await fsp.readdir(globalPath, {
+        withFileTypes: true,
+      })
+      const allBlueprintsFound = directoryContents.every((directoryContent) => {
+        if (directoryContent.isFile()) {
+          return true
+        }
+        const blueprintPath = path.resolve(globalPath, directoryContent.name)
 
-      expect(output).toContain('--- Global Blueprints ---')
-      expect(output).toContain('--- Project Blueprints ---')
-      expect(output).toContain('action - ')
-      expect(output).toContain('example - ')
-      expect(output).toContain('util - ')
+        return output.includes(`${directoryContent.name} - ${blueprintPath}`)
+      })
+
+      expect(allBlueprintsFound).toBeTruthy()
+    })
+
+    test('can show project blueprints', async () => {
+      const { output } = await run('list')
+      const globalPath = path.resolve('./.blueprints')
+      const directoryContents = await fsp.readdir(globalPath, {
+        withFileTypes: true,
+      })
+      const allBlueprintsFound = directoryContents.every((directoryContent) => {
+        if (directoryContent.isFile()) {
+          return true
+        }
+        const blueprintPath = path.resolve(globalPath, directoryContent.name)
+
+        return output.includes(`${directoryContent.name} - ${blueprintPath}`)
+      })
+
+      expect(allBlueprintsFound).toBeTruthy()
     })
   })
 
