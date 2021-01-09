@@ -7,7 +7,7 @@ const {
   GLOBAL_BLUEPRINTS_PATH,
 } = require('../../../config')
 
-module.exports = function createFromDirectory(blueprintName, command) {
+module.exports = async function createFromDirectory(blueprintName, command) {
   const isGlobal = command.global || false
   const source = command.source.length
     ? path.resolve(command.source)
@@ -15,22 +15,24 @@ module.exports = function createFromDirectory(blueprintName, command) {
   const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
   const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
   const location = isGlobal ? globalLocation : projectLocation
-
-  if (fs.pathExistsSync(location)) {
-    throw new Error(`A blueprint called ${blueprintName} already exists`)
+  try {
+    if (fs.pathExistsSync(location)) {
+      throw new Error(`A blueprint called ${blueprintName} already exists`)
+    }
+    await fs.outputJson(
+      path.resolve(location, './blueprint.json'),
+      {},
+      { space: 2 }
+    )
+    await fs.copy(
+      source,
+      path.resolve(location, './files/__blueprintInstance__')
+    )
+    return {
+      success: true,
+      message: `${blueprintName} was created at: ${location}`,
+    }
+  } catch (error) {
+    return error
   }
-
-  return Promise.all([
-    fs.outputJson(path.resolve(location, './blueprint.json'), {}, { space: 2 }),
-    fs.copy(source, path.resolve(location, './files/__blueprintInstance__')),
-  ])
-    .then(() => {
-      console.log(`${blueprintName} was created at: ${location}`)
-    })
-    .catch((err) => {
-      console.error(err)
-      fs.remove(path.resolve(location)).catch((rmError) => {
-        console.error(rmError)
-      })
-    })
 }

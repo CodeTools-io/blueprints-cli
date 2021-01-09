@@ -16,6 +16,7 @@ beforeEach(async () => {
   await fs.mkdirp('test_output')
 })
 afterEach(async () => {
+  await fs.remove('.blueprints/OneIMade')
   await fs.remove('test_output')
 })
 describe('app', () => {
@@ -58,7 +59,7 @@ describe('app', () => {
   })
 
   describe('generate', () => {
-    test('can show status', async () => {
+    test('can show generation status', async () => {
       const { output } = await run('generate mockA mockAInstance')
 
       expect(output).toEqual(
@@ -66,7 +67,7 @@ describe('app', () => {
       )
     })
 
-    test('can create files', async () => {
+    test('can create blueprint instances', async () => {
       const { output } = await run('generate mockB Allie')
 
       const blueprintInstanceFound = await fs.pathExists(`test_output/mockB`)
@@ -87,21 +88,37 @@ describe('app', () => {
     test('can inject data into templates', async () => {
       const { output } = await run('generate mockA Madilyn')
 
-      const blueprintInstanceFound = await fs.pathExists(
-        `test_output/Madilyn/Madilyn.txt`
-      )
-
-      expect(blueprintInstanceFound).toBeTruthy()
-    })
-
-    test('can inject data into templates', async () => {
-      const { output } = await run('generate mockA Isaiah')
-
-      const fileContent = await fs.readFile(`test_output/Isaiah/Isaiah.txt`, {
+      const fileContent = await fs.readFile(`test_output/Madilyn/Madilyn.txt`, {
         encoding: 'utf8',
       })
 
-      expect(fileContent).toEqual('Isaiah content')
+      expect(fileContent).toEqual('Madilyn content')
+    })
+  })
+
+  describe('new', () => {
+    test('can show creation status', async () => {
+      const { output } = await run('new OneIMade')
+
+      expect(output).toEqual(
+        `OneIMade was created at ${process.cwd()}/.blueprints/OneIMade`
+      )
+    })
+
+    test('can create blank blueprints', async () => {
+      const { output } = await run('new OneIMade')
+      const foundBlueprintFile = await fs.pathExists(
+        '.blueprints/OneIMade/blueprint.json'
+      )
+
+      expect(foundBlueprintFile).toEqual(true)
+    })
+
+    test('can detect existing blueprints', async () => {
+      await run('new OneIMade')
+      const { output } = await run('new OneIMade')
+
+      expect(output).toEqual('A blueprint named OneIMade already exists')
     })
   })
 })
