@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 const getMetadata = require('../../utils/getMetadata')
 const getTemplateData = require('../../utils/getTemplateData')
 const Blueprint = require('../../lib/Blueprint')
+const log = require('../../utils/log')
 
 const {
   CURRENT_PATH,
@@ -16,6 +17,7 @@ module.exports = async function generate(
   command
 ) {
   try {
+    log.clear()
     const destination = command.dest || CURRENT_PATH
     const data = getTemplateData(command.args.slice(2))
     const metadata = getMetadata({
@@ -25,7 +27,7 @@ module.exports = async function generate(
     const location = getBlueprintPath(blueprintName)
 
     if (!location) {
-      console.error('Blueprint not found')
+      log.error('Blueprint not found')
       return
     }
 
@@ -55,9 +57,14 @@ module.exports = async function generate(
         ...metadata,
       },
     })
-    console.log(
+
+    log(
       `Generated ${blueprintInstance} based on the ${blueprintName} blueprint`
     )
+    this.output = log.output()
+
+    return log.output()
+
     function getBlueprintPath(name) {
       const globalBlueprintPath = path.resolve(
         GLOBAL_BLUEPRINTS_PATH,
@@ -79,6 +86,6 @@ module.exports = async function generate(
       return null
     }
   } catch (error) {
-    console.error(error)
+    log.error(error)
   }
 }
