@@ -1,6 +1,15 @@
 const path = require('path')
 const fs = require('fs-extra')
 const { PROJECT_ROOT_PATH, GLOBAL_BLUEPRINTS_PATH } = require('../../../config')
+const DEFAULT_SCRIPT = `
+// fs docs: https://github.com/jprichardson/node-fs-extra
+// _ docs: https://lodash.com/docs
+
+module.exports = function(data, libraries) {
+  const {_, fs} = libraries;
+  // ...code to execute
+}
+`
 
 module.exports = async function createBlank(blueprintName, options = {}) {
   let blueprintPath
@@ -21,10 +30,21 @@ module.exports = async function createBlank(blueprintName, options = {}) {
     await fs.ensureDir(
       path.resolve(blueprintPath, './files/__blueprintInstance__')
     )
+    await fs.outputFile(
+      path.resolve(blueprintPath, './scripts/preGenerate.js'),
+      DEFAULT_SCRIPT.trim()
+    )
+    await fs.outputFile(
+      path.resolve(blueprintPath, './scripts/postGenerate.js'),
+      DEFAULT_SCRIPT.trim()
+    )
     await fs.outputJson(
       path.resolve(blueprintPath, './blueprint.json'),
-      {},
-      { space: 2 }
+      {
+        preGenerate: ['scripts/preGenerate.js'],
+        postGenerate: ['scripts/postGenerate.js'],
+      },
+      { spaces: 2 }
     )
 
     return {

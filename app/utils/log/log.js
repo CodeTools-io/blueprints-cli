@@ -10,6 +10,10 @@ log.warning = function (value) {
   queue = [...queue, `⚠️ ${value}`]
 }
 
+log.success = function (value) {
+  queue = [...queue, `✅ ${value}`]
+}
+
 log.error = function (value) {
   throw new Error(`${value}`)
 }

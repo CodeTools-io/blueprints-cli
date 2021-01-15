@@ -4,22 +4,28 @@ const fs = require('fs-extra')
 const { default: scaffold } = require('scaffold-helper')
 const _ = require('lodash')
 const { merge } = _
-
+const log = require('../../utils/log')
 class Blueprint {
   constructor({ name, location, source }) {
     this.name = name
     this.location = location
     this.source = source
     this.filesPath = path.resolve(location, './files')
-    this.configPath = path.resolve(location, './blueprint.json')
+
     this.config = {
       preGenerate: [],
       postGenerate: [],
       data: {},
     }
 
-    if (fs.pathExistsSync(this.configPath)) {
-      const configFile = require(this.configPath)
+    this.loadConfigFile(location)
+  }
+
+  loadConfigFile(location) {
+    const configPath = path.resolve(location, './blueprint.json')
+
+    if (fs.pathExistsSync(configPath)) {
+      const configFile = require(configPath)
       this.config = merge({}, this.config, configFile)
     }
   }
@@ -82,8 +88,10 @@ class Blueprint {
         '<instancePath>',
         path.resolve(destination, mergedData.blueprintInstance)
       )
-      console.log(`░░░░░░ ${command} ░░░░░░`)
-      const preGenerate = require(command)
+
+      log.success(`${command} Executed`)
+
+      const preGenerate = require(path.resolve(this.location, command))
 
       preGenerate(mergedData, { _, fs })
     })
@@ -102,8 +110,9 @@ class Blueprint {
         path.resolve(destination, mergedData.blueprintInstance)
       )
 
-      console.log(`░░░░░░ ${command} ░░░░░░`)
-      const postGenerate = require(command)
+      log.success(`${command} Executed`)
+
+      const postGenerate = require(path.resolve(this.location, command))
 
       postGenerate(mergedData, { _, fs })
     })
@@ -125,7 +134,9 @@ class Blueprint {
           { source: this.filesPath, destination, onlyFiles: false },
           mergedData
         )
-        // return BlueprintInstance
+
+        log.success(`Blueprint Instance of ${this.name} Generated`)
+
         return { type: this.name, location: destination, data }
       })
       .catch((err) => {

@@ -63,7 +63,7 @@ describe('app', () => {
       const { output } = await run('generate mockA mockAInstance')
 
       expect(output).toEqual(
-        'Generated mockAInstance based on the mockA blueprint'
+        '✅ Blueprint Instance of mockA Generated\nGenerated mockAInstance based on the mockA blueprint'
       )
     })
 

@@ -6,7 +6,15 @@ const {
   PROJECT_BLUEPRINTS_PATH,
   GLOBAL_BLUEPRINTS_PATH,
 } = require('../../../config')
+const DEFAULT_SCRIPT = `
+// fs docs: https://github.com/jprichardson/node-fs-extra
+// _ docs: https://lodash.com/docs
 
+module.exports = function(data, libraries) {
+  const {_, fs} = libraries;
+  // ...code to execute
+}
+`
 module.exports = async function createFromDirectory(blueprintName, command) {
   const isGlobal = command.global || false
   const source = command.source.length
@@ -19,10 +27,21 @@ module.exports = async function createFromDirectory(blueprintName, command) {
     if (fs.pathExistsSync(location)) {
       throw new Error(`A blueprint called ${blueprintName} already exists`)
     }
+    await fs.outputFile(
+      path.resolve(blueprintPath, './scripts/preGenerate.js'),
+      DEFAULT_SCRIPT.trim()
+    )
+    await fs.outputFile(
+      path.resolve(blueprintPath, './scripts/postGenerate.js'),
+      DEFAULT_SCRIPT.trim()
+    )
     await fs.outputJson(
-      path.resolve(location, './blueprint.json'),
-      {},
-      { space: 2 }
+      path.resolve(blueprintPath, './blueprint.json'),
+      {
+        preGenerate: ['scripts/preGenerate.js'],
+        postGenerate: ['scripts/postGenerate.js'],
+      },
+      { spaces: 2 }
     )
     await fs.copy(
       source,
