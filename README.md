@@ -10,11 +10,11 @@ The goal of the project is the automation of file creation, with simplicity, fle
 
 ## Installation
 
-`npm install -g @cliffpyles/blueprints-cli`
+`npm install -g @codetools/blueprints-cli`
 
 or
 
-`yarn global add @cliffpyles/blueprints-cli`
+`yarn global add @codetools/blueprints-cli`
 
 ## Quick Start
 
