@@ -63,8 +63,6 @@ module.exports = async function generate(
     )
     this.output = log.output()
 
-    return log.output()
-
     function getBlueprintPath(name) {
       const globalBlueprintPath = path.resolve(
         GLOBAL_BLUEPRINTS_PATH,

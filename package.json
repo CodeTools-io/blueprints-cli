@@ -1,6 +1,6 @@
 {
   "name": "@codetools/blueprints-cli",
-  "version": "1.14.4",
+  "version": "1.14.5",
   "description": "A tool for generating predefined files and directories",
   "private": false,
   "main": "index.js",
