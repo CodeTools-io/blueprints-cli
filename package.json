@@ -6,7 +6,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/codetools/blueprints-cli"
+    "url": "https://github.com/codetools-io/blueprints-cli"
   },
   "bin": {
     "bp": "./app/cli.js"
