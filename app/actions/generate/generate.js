@@ -36,6 +36,27 @@ module.exports = async function generate(
       location,
     })
 
+    function getBlueprintPath(name) {
+      const globalBlueprintPath = path.resolve(
+        GLOBAL_BLUEPRINTS_PATH,
+        `./${name}`
+      )
+      const projectBlueprintPath = path.resolve(
+        PROJECT_BLUEPRINTS_PATH,
+        `./${name}`
+      )
+
+      if (fs.pathExistsSync(projectBlueprintPath)) {
+        return projectBlueprintPath
+      }
+
+      if (fs.pathExistsSync(globalBlueprintPath)) {
+        return globalBlueprintPath
+      }
+
+      return null
+    }
+
     await blueprint.preGenerate({
       destination,
       data: {
@@ -58,31 +79,7 @@ module.exports = async function generate(
       },
     })
 
-    log(
-      `Generated ${blueprintInstance} based on the ${blueprintName} blueprint`
-    )
     this.output = log.output()
-
-    function getBlueprintPath(name) {
-      const globalBlueprintPath = path.resolve(
-        GLOBAL_BLUEPRINTS_PATH,
-        `./${name}`
-      )
-      const projectBlueprintPath = path.resolve(
-        PROJECT_BLUEPRINTS_PATH,
-        `./${name}`
-      )
-
-      if (fs.pathExistsSync(projectBlueprintPath)) {
-        return projectBlueprintPath
-      }
-
-      if (fs.pathExistsSync(globalBlueprintPath)) {
-        return globalBlueprintPath
-      }
-
-      return null
-    }
   } catch (error) {
     log.error(error)
   }

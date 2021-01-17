@@ -62,9 +62,9 @@ describe('app', () => {
     test('can show generation status', async () => {
       const { output } = await run('generate mockA mockAInstance')
 
-      expect(output).toEqual(
-        '✅ Blueprint Instance of mockA Generated\nGenerated mockAInstance based on the mockA blueprint'
-      )
+      expect(output).toContain(`✅ executed preGenerate hook`)
+      expect(output).toContain(`✅ created instance`)
+      expect(output).toContain(`✅ executed postGenerate hook`)
     })
 
     test('can create blueprint instances', async () => {

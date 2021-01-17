@@ -2,11 +2,13 @@ const path = require('path')
 const fs = require('fs-extra')
 const { PROJECT_ROOT_PATH, GLOBAL_BLUEPRINTS_PATH } = require('../../../config')
 const DEFAULT_SCRIPT = `
-// fs docs: https://github.com/jprichardson/node-fs-extra
-// _ docs: https://lodash.com/docs
-
 module.exports = function(data, libraries) {
-  const {_, fs} = libraries;
+  // fs docs: https://github.com/jprichardson/node-fs-extra
+  // _ docs: https://lodash.com/docs
+  // date docs: https://date-fns.org
+
+  const {_, fs, date} = libraries;
+
   // ...code to execute
 }
 `

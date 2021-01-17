@@ -3,6 +3,7 @@ const child_process = require('child_process')
 const fs = require('fs-extra')
 const { default: scaffold } = require('scaffold-helper')
 const _ = require('lodash')
+const date = require('date-fns')
 const { merge } = _
 const log = require('../../utils/log')
 class Blueprint {
@@ -89,11 +90,11 @@ class Blueprint {
         path.resolve(destination, mergedData.blueprintInstance)
       )
 
-      log.success(`${command} Executed`)
+      log.success(`executed preGenerate hook`)
 
       const preGenerate = require(path.resolve(this.location, command))
 
-      preGenerate(mergedData, { _, fs })
+      preGenerate(mergedData, { _, fs, date })
     })
   }
 
@@ -110,11 +111,11 @@ class Blueprint {
         path.resolve(destination, mergedData.blueprintInstance)
       )
 
-      log.success(`${command} Executed`)
+      log.success(`executed postGenerate hook`)
 
       const postGenerate = require(path.resolve(this.location, command))
 
-      postGenerate(mergedData, { _, fs })
+      postGenerate(mergedData, { _, fs, date })
     })
   }
 
@@ -127,6 +128,7 @@ class Blueprint {
       throw new Error('blueprint does not exist')
     }
     const mergedData = merge({}, this.config.data, data)
+
     return fs
       .ensureDir(destination)
       .then(() => {
@@ -135,7 +137,7 @@ class Blueprint {
           mergedData
         )
 
-        log.success(`Blueprint Instance of ${this.name} Generated`)
+        log.success(`created instance`)
 
         return { type: this.name, location: destination, data }
       })

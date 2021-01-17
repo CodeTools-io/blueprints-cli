@@ -1,1 +1,8 @@
-{}
+{
+  "preGenerate": [
+    "scripts/preGenerate.js"
+  ],
+  "postGenerate": [
+    "scripts/postGenerate.js"
+  ]
+}
