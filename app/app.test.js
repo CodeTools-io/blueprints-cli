@@ -101,7 +101,7 @@ describe('app', () => {
       const { output } = await run('new OneIMade')
 
       expect(output).toEqual(
-        `OneIMade was created at ${process.cwd()}/.blueprints/OneIMade`
+        `✅ OneIMade was created at ${process.cwd()}/.blueprints/OneIMade`
       )
     })
 
@@ -118,7 +118,7 @@ describe('app', () => {
       await run('new OneIMade')
       const { output } = await run('new OneIMade')
 
-      expect(output).toEqual('A blueprint named OneIMade already exists')
+      expect(output).toEqual('❌ A blueprint named OneIMade already exists')
     })
   })
 })

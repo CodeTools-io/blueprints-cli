@@ -19,7 +19,10 @@ log.success = function (value) {
 }
 
 log.error = function (value) {
-  throw new Error(`❌ ${value}`)
+  // throw new Error(`❌ ${value}`)
+  console.error(`❌ ${value}`)
+
+  return `❌ ${value}`
 }
 
 log.output = function () {

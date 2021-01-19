@@ -54,6 +54,6 @@ module.exports = async function createBlank(blueprintName, options = {}) {
       message: `${blueprintName} was created at ${blueprintPath}`,
     }
   } catch (error) {
-    return error
+    throw error
   }
 }

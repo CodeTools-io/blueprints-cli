@@ -26,20 +26,21 @@ module.exports = async function createFromDirectory(blueprintName, command) {
   const globalLocation = path.resolve(GLOBAL_BLUEPRINTS_PATH, blueprintName)
   const projectLocation = path.resolve(PROJECT_BLUEPRINTS_PATH, blueprintName)
   const location = isGlobal ? globalLocation : projectLocation
+
   try {
     if (fs.pathExistsSync(location)) {
       throw new Error(`A blueprint called ${blueprintName} already exists`)
     }
     await fs.outputFile(
-      path.resolve(blueprintPath, './scripts/preGenerate.js'),
+      path.resolve(location, './scripts/preGenerate.js'),
       DEFAULT_SCRIPT.trim()
     )
     await fs.outputFile(
-      path.resolve(blueprintPath, './scripts/postGenerate.js'),
+      path.resolve(location, './scripts/postGenerate.js'),
       DEFAULT_SCRIPT.trim()
     )
     await fs.outputJson(
-      path.resolve(blueprintPath, './blueprint.json'),
+      path.resolve(location, './blueprint.json'),
       {
         preGenerate: ['scripts/preGenerate.js'],
         postGenerate: ['scripts/postGenerate.js'],
@@ -52,9 +53,9 @@ module.exports = async function createFromDirectory(blueprintName, command) {
     )
     return {
       success: true,
-      message: `${blueprintName} was created at: ${location}`,
+      message: `${blueprintName} was created at ${location}`,
     }
   } catch (error) {
-    return error
+    throw error
   }
 }

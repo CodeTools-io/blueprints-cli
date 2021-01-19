@@ -22,8 +22,8 @@ describe('log', () => {
   })
 
   test('can log error output', () => {
-    expect(() => {
-      log.error('first error')
-    }).toThrow('first error')
+    const result = log.error('first error')
+
+    expect(result).toEqual('❌ first error')
   })
 })
