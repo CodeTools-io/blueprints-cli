@@ -6,6 +6,10 @@ function log(...value) {
   return queue
 }
 
+log.info = function (value) {
+  queue = [...queue, `ℹ️ ${value}`]
+}
+
 log.warning = function (value) {
   queue = [...queue, `⚠️ ${value}`]
 }
@@ -15,7 +19,7 @@ log.success = function (value) {
 }
 
 log.error = function (value) {
-  throw new Error(`${value}`)
+  throw new Error(`❌ ${value}`)
 }
 
 log.output = function () {
