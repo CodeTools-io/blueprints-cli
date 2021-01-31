@@ -27,14 +27,17 @@ describe('app', () => {
       const directoryContents = await fsp.readdir(globalPath, {
         withFileTypes: true,
       })
-      const allBlueprintsFound = directoryContents.every((directoryContent) => {
-        if (directoryContent.isFile()) {
-          return true
-        }
-        const blueprintPath = path.resolve(globalPath, directoryContent.name)
 
-        return output.includes(`${directoryContent.name} - ${blueprintPath}`)
-      })
+      const allBlueprintsFound = directoryContents
+        .filter((c) => !c.name.startsWith('.git'))
+        .every((directoryContent) => {
+          if (directoryContent.isFile()) {
+            return true
+          }
+          const blueprintPath = path.resolve(globalPath, directoryContent.name)
+
+          return output.includes(`${directoryContent.name} - ${blueprintPath}`)
+        })
 
       expect(allBlueprintsFound).toBeTruthy()
     })

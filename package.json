@@ -13,7 +13,8 @@
   },
   "scripts": {
     "postinstall": "mkdir -p ~/.blueprints",
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "test:debug": "jest"
   },
   "keywords": [
     "node",
