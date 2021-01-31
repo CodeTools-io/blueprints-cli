@@ -23,6 +23,7 @@ app
   .command('list [namespace]')
   .alias('ls')
   .description('List all available blueprints')
+  .option('-l, --long', 'Shows more detail about the blueprints', false)
   .action(list)
 
 app

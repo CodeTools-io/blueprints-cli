@@ -9,7 +9,7 @@ const {
   GLOBAL_BLUEPRINTS_PATH,
 } = require('../../config')
 
-module.exports = async function list(namespace = '') {
+module.exports = async function list(namespace = '', options) {
   try {
     log.clear()
     const blueprints = await getAllBlueprints(namespace)
@@ -17,7 +17,10 @@ module.exports = async function list(namespace = '') {
     log(`--- Global Blueprints ---`)
     if (blueprints.global && blueprints.global.length) {
       blueprints.global.forEach((blueprint) => {
-        log(`${blueprint.name} - ${blueprint.location}`)
+        log(`\n${blueprint.name} - ${blueprint.location}`)
+        if (options.long && blueprint.config.description) {
+          log(`  Description: ${blueprint.config.description}`)
+        }
       })
     } else {
       log(`no global blueprints found`)
@@ -26,7 +29,10 @@ module.exports = async function list(namespace = '') {
     log(`\n--- Project Blueprints ---`)
     if (blueprints.project && blueprints.project.length) {
       blueprints.project.forEach((blueprint) => {
-        log(`${blueprint.name} - ${blueprint.location}`)
+        log(`\n${blueprint.name} - ${blueprint.location}`)
+        if (options.long && blueprint.config.description) {
+          log(`  Description: ${blueprint.config.description}`)
+        }
       })
     } else {
       log(`no project blueprints found`)
