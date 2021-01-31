@@ -6,6 +6,8 @@ const _ = require('lodash')
 const date = require('date-fns')
 const { merge } = _
 const log = require('../../utils/log')
+const File = require('../../lib/File')
+
 class Blueprint {
   constructor({ name, location, source }) {
     this.name = name
@@ -94,7 +96,7 @@ class Blueprint {
 
       const preGenerate = require(path.resolve(this.location, command))
 
-      preGenerate(mergedData, { _, fs, date })
+      preGenerate(mergedData, { _, fs, date, File })
     })
   }
 
@@ -115,7 +117,7 @@ class Blueprint {
 
       const postGenerate = require(path.resolve(this.location, command))
 
-      postGenerate(mergedData, { _, fs, date })
+      postGenerate(mergedData, { _, fs, date, File })
     })
   }
 

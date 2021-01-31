@@ -7,7 +7,7 @@ module.exports = function(data, libraries) {
   // _ docs: https://lodash.com/docs
   // date docs: https://date-fns.org
 
-  const {_, fs, date} = libraries;
+  const {_, fs, date, File} = libraries;
 
   // ...code to execute
 }
