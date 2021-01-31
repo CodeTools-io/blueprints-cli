@@ -55,6 +55,7 @@ module.exports = async function list(namespace = '', options) {
       )
       let globalBlueprints = []
       let projectBlueprints = []
+      let excludedPaths = ['.git', 'node_modules', '.gitignore', '.DS_Store']
 
       if (globalBlueprintsPathExists) {
         globalBlueprints = await fs.readdir(globalBlueprintsPath, 'utf8')
@@ -65,34 +66,48 @@ module.exports = async function list(namespace = '', options) {
       }
 
       return {
-        global: globalBlueprints.reduce((accum, blueprint) => {
-          const location = path.resolve(globalBlueprintsPath, `./${blueprint}`)
-
-          if (fs.statSync(location).isDirectory()) {
-            accum.push(
-              new Blueprint({
-                name: blueprint,
-                location,
-              })
+        global: globalBlueprints
+          .reduce((accum, blueprint) => {
+            const location = path.resolve(
+              globalBlueprintsPath,
+              `./${blueprint}`
             )
-          }
 
-          return accum
-        }, []),
-        project: projectBlueprints.reduce((accum, blueprint) => {
-          const location = path.resolve(projectBlueprintsPath, `./${blueprint}`)
+            if (fs.statSync(location).isDirectory()) {
+              accum.push(
+                new Blueprint({
+                  name: blueprint,
+                  location,
+                })
+              )
+            }
 
-          if (fs.statSync(location).isDirectory()) {
-            accum.push(
-              new Blueprint({
-                name: blueprint,
-                location,
-              })
+            return accum
+          }, [])
+          .filter((blueprint) => {
+            return !excludedPaths.includes(blueprint.name)
+          }),
+        project: projectBlueprints
+          .reduce((accum, blueprint) => {
+            const location = path.resolve(
+              projectBlueprintsPath,
+              `./${blueprint}`
             )
-          }
 
-          return accum
-        }, []),
+            if (fs.statSync(location).isDirectory()) {
+              accum.push(
+                new Blueprint({
+                  name: blueprint,
+                  location,
+                })
+              )
+            }
+
+            return accum
+          }, [])
+          .filter((blueprint) => {
+            return !excludedPaths.includes(blueprint.name)
+          }),
       }
     }
     this.output = log.output()
