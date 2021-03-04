@@ -37,11 +37,15 @@ class File {
 
   ensureText(value) {
     return this.registerOperation((currentValue) => {
-      if (!currentValue.includes(value)) {
+      const hasText = currentValue.some((lineOfText) =>
+        lineOfText.includes(value)
+      )
+
+      if (!hasText) {
         return `${currentValue}\n${value}`
       }
 
-      return currentValue
+      return `${currentValue}`
     })
   }
 
