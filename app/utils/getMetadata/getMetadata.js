@@ -40,14 +40,14 @@ function getMetadata ({ blueprintInstance, blueprint }) {
       if (key === 'blueprintInstance_ConstantFormat') {
         return {
           ...accum,
-          [`${key}_plural`]: inflection.pluralize(value).toUpperCase(),
-          [`${key}_singular`]: inflection.singularize(value).toUpperCase()
+          [`${key}Pluralized`]: inflection.pluralize(value).toUpperCase(),
+          [`${key}Singularized`]: inflection.singularize(value).toUpperCase()
         }
       }
       return {
         ...accum,
-        [`${key}_plural`]: inflection.pluralize(value),
-        [`${key}_singular`]: inflection.singularize(value)
+        [`${key}Pluralized`]: inflection.pluralize(value),
+        [`${key}Singularized`]: inflection.singularize(value)
       }
     },
     {}
