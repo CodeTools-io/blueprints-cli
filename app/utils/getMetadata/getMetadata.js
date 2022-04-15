@@ -1,6 +1,6 @@
 const inflection = require('inflection')
 
-function getMetadata({ blueprintInstance, blueprint }) {
+function getMetadata ({ blueprintInstance, blueprint }) {
   const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
   let data = {}
   data['blueprint'] = blueprint
@@ -8,14 +8,10 @@ function getMetadata({ blueprintInstance, blueprint }) {
   data['blueprintInstance_ClassFormat'] = inflection.classify(
     standardBlueprintInstance
   )
-  data[
-    'blueprintInstance_dashed-format'
-  ] = inflection
+  data['blueprintInstance_dashed-format'] = inflection
     .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
     .toLowerCase()
-  data[
-    'blueprintInstance_DashedFormat'
-  ] = inflection
+  data['blueprintInstance_DashedFormat'] = inflection
     .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
     .toLowerCase()
   data['blueprintInstance_slug-format'] =
@@ -39,7 +35,28 @@ function getMetadata({ blueprintInstance, blueprint }) {
     .underscore(standardBlueprintInstance)
     .toUpperCase()
 
-  return data
+  const singlePluralVersions = Object.entries(data).reduce(
+    (accum, [key, value]) => {
+      if (key === 'blueprintInstance_ConstantFormat') {
+        return {
+          ...accum,
+          [`${key}_plural`]: inflection.pluralize(value).toUpperCase(),
+          [`${key}_singular`]: inflection.singularize(value).toUpperCase()
+        }
+      }
+      return {
+        ...accum,
+        [`${key}_plural`]: inflection.pluralize(value),
+        [`${key}_singular`]: inflection.singularize(value)
+      }
+    },
+    {}
+  )
+
+  return {
+    ...data,
+    ...singlePluralVersions
+  }
 }
 
 module.exports = getMetadata
