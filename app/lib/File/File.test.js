@@ -46,7 +46,7 @@ describe('File', () => {
   test('can ensure text', async () => {
     const filepath = path.resolve(__dirname, './test/example.txt')
     const file = new File(filepath)
-    await file.ensureText('new text').ensureText('new text').apply()
+    await file.ensureText('new text').apply()
 
     expect(file.content.match(/new text/g)).toEqual(['new text'])
   })
