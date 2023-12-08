@@ -54,7 +54,7 @@ Below is a table outlining the available commands, their descriptions, and optio
 
 | Command | Description | Options |
 | ------- | ----------- | ------- |
-| `generate\|g <blueprint> <blueprintInstance>` | Generate files from a blueprint. | `-d, --dest <destination>`: Specify the directory for the files. |
+| `generate\|g <blueprint> <blueprintInstance>` | Generate files from a blueprint. | `-d, --dest <destination>`: Specify the directory for the files.<br>`<args>`: Additional arguments for template data and metadata. |
 | `help [command]` | Display help for a command. | None |
 | `import <globalBlueprint> [localBlueprint]` | Import a global blueprint to a local project. | None |
 | `init [projectPath]` | Initialize a local blueprints project. | None |
@@ -81,6 +81,14 @@ bp generate <blueprintName> <blueprintInstanceName>
 
 The tool searches for the blueprint in the current and parent directories up to the home directory. It uses the first blueprint it finds unless directed to use a global blueprint.
 
+### Template Data
+
+Template data, passed as key-value pairs during the `generate` command, customizes the content of the generated files by replacing specific placeholders in the blueprint files.
+
+### Metadata
+
+Metadata, derived from the blueprint instance name, automatically formats these placeholders to adhere to various naming conventions, ensuring consistency across the generated files.
+
 ### Blueprint Structure
 
 ```
@@ -105,3 +113,63 @@ Contains files and directories copied during instance generation.
 #### hooks.js
 
 A Node module exporting functions executed during instance generation.
+
+## Basic Example: Creating Project Status Reports
+
+### Scenario
+
+You're regularly creating status reports for different projects. Each report should be friendly and informative, including the project's name, its status, and the report's date.
+
+### End Result
+
+A report at `./ProjectAlpha/2023-12-08-Report.txt`, containing:
+
+```plaintext
+Hello Team!
+
+Here's the latest update on Project Alpha:
+- Status as of now: On Track
+- Report Date: 2023-12-08
+
+Keep the momentum going!
+```
+
+### Step 1: Creating the Blueprint
+
+First, we create the blueprint:
+
+```bash
+bp new -g statusReportBlueprint
+```
+
+Now we have a blueprint created at `~/.blueprints/statusReportBlueprint`
+
+### Step 2: Defining the Blueprint's Templates
+- Create a file at `~/.blueprints/statusReportBlueprint/files/__blueprintInstance__/__date__-Report.txt`
+- File Content (`__date__-Report.txt`):
+  ```plaintext
+  Hello Team!
+
+  Here's the latest update on {{projectName}}:
+  - Status as of now: {{status}}
+  - Report Date: {{date}}
+
+  Keep the momentum going!
+  ```
+
+### Step 3: Generating the Report
+
+To create a report for "Project Alpha" on a specific date, we run:
+
+```bash
+bp generate statusReportBlueprint ProjectAlpha projectName="Project Alpha" status="On Track" date=2023-12-08
+```
+
+Here's what happens:
+
+- The command interprets `ProjectAlpha` and `2023-12-08` to dynamically create:
+  - A filename: `ProjectAlpha/2023-12-08-Report.txt`.
+  - A report content that warmly addresses "Project Alpha" and mentions the specific date.
+- The `status` value is also seamlessly integrated into the report, completing the picture.
+
+The result is a customized, friendly status report.
