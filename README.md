@@ -42,21 +42,25 @@ Add files for reuse to your blueprint:
 
 ### 3. Use the Blueprint
 
-Generate files in your desired folder:
+Generate files in your desired directory:
 
 ```bash
-bp generate ExampleBlueprint MyInstance
+bp generate <blueprintName> <blueprintInstanceName>
 ```
 
 ## Commands
 
-- `generate|g [options] <blueprint> <blueprintInstance>`: Generate files from a blueprint.
-- `list|ls [namespace]`: List all available blueprints.
-- `new [options] <blueprint>`: Create a new blueprint.
-- `import <globalBlueprint> [localBlueprint]`: Create a local blueprint from a global one.
-- `init [projectPath]`: Initialize a local blueprints project.
-- `remove|rm [options] <blueprint>`: Remove a blueprint.
-- `help [command]`: Display help for a command.
+Below is a table outlining the available commands, their descriptions, and options:
+
+| Command | Description | Options |
+| ------- | ----------- | ------- |
+| `generate\|g <blueprint> <blueprintInstance>` | Generate files from a blueprint. | `-d, --dest <destination>`: Specify the directory for the files. |
+| `help [command]` | Display help for a command. | None |
+| `import <globalBlueprint> [localBlueprint]` | Import a global blueprint to a local project. | None |
+| `init [projectPath]` | Initialize a local blueprints project. | None |
+| `list\|ls [namespace]` | List all available blueprints. | `-l, --long`: Show more details about each blueprint. |
+| `new <blueprint>` | Create a new blueprint. | `-g, --global`: Create the blueprint globally. <br> `-s, --source [sourcePath]`: Specify an initial source path for blueprint files. |
+| `remove\|rm <blueprint>` | Remove a blueprint. | `-g, --global`: Remove a global blueprint. |
 
 ## How it Works
 
