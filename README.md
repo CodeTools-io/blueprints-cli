@@ -103,20 +103,6 @@ Below is a table outlining the available commands, their descriptions, and optio
 
 You're regularly creating status reports for different projects. Each report should be friendly and informative, including the project's name, its status, and the report's date.
 
-### End Result
-
-A report at `./ProjectAlpha/2023-12-08-Report.txt`, containing:
-
-```plaintext
-Hello Team!
-
-Here's the latest update on Project Alpha:
-- Status as of now: On Track
-- Report Date: 2023-12-08
-
-Keep the momentum going!
-```
-
 ### Step 1: Creating the Blueprint
 
 First, we create the blueprint:
@@ -155,4 +141,17 @@ Here's what happens:
   - A report content that warmly addresses "Project Alpha" and mentions the specific date.
 - The `status` value is also seamlessly integrated into the report, completing the picture.
 
-The result is a customized, friendly status report.
+
+### End Result
+
+The result is a customized, friendly status report at `./ProjectAlpha/2023-12-08-Report.txt`, containing:
+
+```plaintext
+Hello Team!
+
+Here's the latest update on Project Alpha:
+- Status as of now: On Track
+- Report Date: 2023-12-08
+
+Keep the momentum going!
+```
