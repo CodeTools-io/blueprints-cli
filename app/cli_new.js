@@ -218,7 +218,107 @@ class Blueprint {
     }
   }
 
-  // Additional methods for remove, create, preGenerate, postGenerate, generate...
+  remove() {
+    if (!this.name) {
+      throw new Error('No name specified')
+    }
+    if (!this.location) {
+      throw new Error('No location specified')
+    }
+    if (!fs.statSync(this.location).isDirectory()) {
+      throw new Error('Blueprint not found')
+    }
+    return fs
+      .remove(this.location)
+      .then(() => this)
+      .catch((err) => {
+        throw err
+      })
+  }
+
+  create(options) {
+    if (!this.source) {
+      throw new Error('No source specified')
+    }
+    if (!this.location) {
+      throw new Error('No location specified')
+    }
+    return fs
+      .ensureDir(this.location)
+      .then(() => {
+        return fs.copy(this.source, this.filesPath)
+      })
+      .catch((err) => {
+        throw err
+      })
+  }
+
+  preGenerate({ destination, data = {} }) {
+    const mergedData = merge({}, this.config.data, data)
+    return Promise.all(
+      this.config.preGenerate.map((configCommand) => {
+        const commandPath = path.resolve(this.location, configCommand)
+        const command = require(commandPath)
+        return command(mergedData, { _, fs, date, File })
+      })
+    ).catch((err) => {
+      throw err
+    })
+  }
+
+  generate({ destination, data = {} }) {
+    if (!destination) {
+      throw new Error('No destination specified')
+    }
+    if (!fs.pathExistsSync(this.filesPath)) {
+      throw new Error('Blueprint files not found')
+    }
+    const mergedData = merge({}, this.config.data, data)
+    return fs
+      .ensureDir(destination)
+      .then(() => {
+        return fs.copy(this.filesPath, destination)
+      })
+      .then(() => {
+        // Process each file at the destination
+        return globby(path.join(destination, '**/*'), { dot: true }).then(
+          (files) => {
+            return Promise.all(
+              files.map((file) => {
+                // Perform operations on each file, e.g., template processing
+                // This is an example and should be customized based on your application's needs
+                if (path.extname(file) === '.tmpl') {
+                  return fs.readFile(file, 'utf8').then((content) => {
+                    // Replace template placeholders with data
+                    const processedContent = _.template(content)(mergedData)
+                    const newFilePath = file.replace('.tmpl', '')
+                    return fs
+                      .outputFile(newFilePath, processedContent)
+                      .then(() => fs.remove(file))
+                  })
+                }
+              })
+            )
+          }
+        )
+      })
+      .catch((err) => {
+        throw err
+      })
+  }
+
+  postGenerate({ destination, data = {} }) {
+    const mergedData = merge({}, this.config.data, data)
+    return Promise.all(
+      this.config.postGenerate.map((configCommand) => {
+        const commandPath = path.resolve(this.location, configCommand)
+        const command = require(commandPath)
+        return command(mergedData, { _, fs, date, File })
+      })
+    ).catch((err) => {
+      throw err
+    })
+  }
 }
 
 // Class File
