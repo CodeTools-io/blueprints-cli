@@ -83,6 +83,101 @@ function getMetadata({ blueprintInstance, blueprint }) {
   return _.assign({}, data, ..._.values(singlePluralVersions))
 }
 
+function getAbsolutePaths(glob, options) {
+  return globby(glob, options).then((results) => {
+    const cwd = options.cwd || process.cwd()
+    return results.map((result) => path.resolve(cwd, result))
+  })
+}
+
+function getObject(keyValueEntries) {
+  return keyValueEntries.reduce((result, [key, value]) => {
+    _.set(result, key, value)
+    return result
+  }, {})
+}
+
+function getParsedKeyValues(keyValues = []) {
+  return keyValues.map((keyVal) => keyVal.split('=', 2))
+}
+
+function getTemplateArgs(argv = []) {
+  return argv.filter((arg) => !arg.startsWith('--'))
+}
+
+function pipe(value, ...fns) {
+  return fns.reduce((accum, fn) => fn(accum), value)
+}
+
+function setValue(data, key, value) {
+  _.set(data, key, value)
+  return data
+}
+
+async function getAllBlueprints(namespace = '') {
+  const globalBlueprintsPath = path.resolve(GLOBAL_BLUEPRINTS_PATH, namespace)
+  const projectBlueprintsPath = path.resolve(PROJECT_BLUEPRINTS_PATH, namespace)
+  const [
+    globalBlueprintsPathExists,
+    projectBlueprintsPathExists,
+  ] = await Promise.all([
+    fs.pathExists(globalBlueprintsPath),
+    fs.pathExists(projectBlueprintsPath),
+  ])
+  let globalBlueprints = []
+  let projectBlueprints = []
+  let excludedPaths = ['.git', 'node_modules', '.gitignore', '.DS_Store']
+
+  if (globalBlueprintsPathExists) {
+    globalBlueprints = await fs.readdir(globalBlueprintsPath, 'utf8')
+  }
+
+  if (projectBlueprintsPathExists) {
+    projectBlueprints = await fs.readdir(projectBlueprintsPath, 'utf8')
+  }
+
+  return {
+    global: globalBlueprints.reduce((accum, blueprint) => {
+      const location = path.resolve(globalBlueprintsPath, `./${blueprint}`)
+      if (
+        fs.statSync(location).isDirectory() &&
+        !excludedPaths.includes(blueprint)
+      ) {
+        accum.push(new Blueprint({ name: blueprint, location }))
+      }
+      return accum
+    }, []),
+    project: projectBlueprints.reduce((accum, blueprint) => {
+      const location = path.resolve(projectBlueprintsPath, `./${blueprint}`)
+      if (
+        fs.statSync(location).isDirectory() &&
+        !excludedPaths.includes(blueprint)
+      ) {
+        accum.push(new Blueprint({ name: blueprint, location }))
+      }
+      return accum
+    }, []),
+  }
+}
+
+function getBlueprintPath(name) {
+  const globalBlueprintPath = path.resolve(GLOBAL_BLUEPRINTS_PATH, `./${name}`)
+  const projectBlueprintPath = path.resolve(
+    PROJECT_BLUEPRINTS_PATH,
+    `./${name}`
+  )
+
+  if (fs.pathExistsSync(projectBlueprintPath)) {
+    return projectBlueprintPath
+  }
+
+  if (fs.pathExistsSync(globalBlueprintPath)) {
+    return globalBlueprintPath
+  }
+
+  return null
+}
+
 // Logging utility
 let logQueue = []
 const log = {
