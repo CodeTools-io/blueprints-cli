@@ -5,9 +5,9 @@ const { default: scaffold } = require('scaffold-helper')
 const _ = require('lodash')
 const date = require('date-fns')
 const { merge } = _
-// const { log } = require('../../utilities')
 const File = require('../../lib/File')
 const { log } = require('../../utilities')
+
 class Blueprint {
   constructor({ name, location, source }) {
     this.name = name

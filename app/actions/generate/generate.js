@@ -1,9 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
-const getMetadata = require('../../utils/getMetadata')
-const getTemplateData = require('../../utils/getTemplateData')
 const Blueprint = require('../../lib/Blueprint')
-const { log } = require('../../utilities')
+const { getMetadata, getTemplateData, log } = require('../../utilities')
 
 const {
   CURRENT_PATH,
