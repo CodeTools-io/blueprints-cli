@@ -1,8 +1,8 @@
-const log = require('../../utils/log')
+const { log } = require('../../utilities')
 module.exports = function help() {
   log.clear()
-  log('')
-  log(
+  log.text('')
+  log.text(
     'Pipes:\n',
     'ClassFormat (ex. ComponentName)\n',
     'DashedFormat (ex. component-name)\n',

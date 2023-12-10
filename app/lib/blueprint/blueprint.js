@@ -5,9 +5,9 @@ const { default: scaffold } = require('scaffold-helper')
 const _ = require('lodash')
 const date = require('date-fns')
 const { merge } = _
-const log = require('../../utils/log')
+// const { log } = require('../../utilities')
 const File = require('../../lib/File')
-
+const { log } = require('../../utilities')
 class Blueprint {
   constructor({ name, location, source }) {
     this.name = name
@@ -69,7 +69,7 @@ class Blueprint {
             destination: this.filesPath,
             onlyFiles: false,
           },
-          {}
+          {},
         )
 
         return this
@@ -89,7 +89,7 @@ class Blueprint {
       command = command.replace('<instanceName>', mergedData.blueprintInstance)
       command = command.replace(
         '<instancePath>',
-        path.resolve(destination, mergedData.blueprintInstance)
+        path.resolve(destination, mergedData.blueprintInstance),
       )
 
       log.success(`executed preGenerate hook`)
@@ -110,7 +110,7 @@ class Blueprint {
       command = command.replace('<instanceName>', mergedData.blueprintInstance)
       command = command.replace(
         '<instancePath>',
-        path.resolve(destination, mergedData.blueprintInstance)
+        path.resolve(destination, mergedData.blueprintInstance),
       )
 
       log.success(`executed postGenerate hook`)
@@ -136,7 +136,7 @@ class Blueprint {
       .then(() => {
         scaffold(
           { source: this.filesPath, destination, onlyFiles: false },
-          mergedData
+          mergedData,
         )
 
         log.success(`created instance`)

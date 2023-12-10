@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 
 const Blueprint = require('../../lib/Blueprint')
-const log = require('../../utils/log')
+const { log } = require('../../utilities')
 
 const {
   PROJECT_BLUEPRINTS_PATH,
@@ -14,28 +14,28 @@ module.exports = async function list(namespace = '', options) {
     log.clear()
     const blueprints = await getAllBlueprints(namespace)
 
-    log(`--- Global Blueprints ---`)
+    log.text(`--- Global Blueprints ---`)
     if (blueprints.global && blueprints.global.length) {
       blueprints.global.forEach((blueprint) => {
-        log(`\n${blueprint.name} - ${blueprint.location}`)
+        log.text(`\n${blueprint.name} - ${blueprint.location}`)
         if (options.long && blueprint.config.description) {
-          log(`  Description: ${blueprint.config.description}`)
+          log.text(`  Description: ${blueprint.config.description}`)
         }
       })
     } else {
-      log(`no global blueprints found`)
+      log.text(`no global blueprints found`)
     }
 
-    log(`\n--- Project Blueprints ---`)
+    log.text(`\n--- Project Blueprints ---`)
     if (blueprints.project && blueprints.project.length) {
       blueprints.project.forEach((blueprint) => {
-        log(`\n${blueprint.name} - ${blueprint.location}`)
+        log.text(`\n${blueprint.name} - ${blueprint.location}`)
         if (options.long && blueprint.config.description) {
-          log(`  Description: ${blueprint.config.description}`)
+          log.text(`  Description: ${blueprint.config.description}`)
         }
       })
     } else {
-      log(`no project blueprints found`)
+      log.text(`no project blueprints found`)
     }
 
     async function getAllBlueprints(namespace = '') {

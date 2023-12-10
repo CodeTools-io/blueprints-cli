@@ -117,42 +117,42 @@ function getTemplateData(args) {
   return pipe(args, getTemplateArgs, getParsedKeyValues, getObject)
 }
 
-let queue = []
+class log {
+  static queue = []
 
-function log(...value) {
-  queue = [...queue, ...value]
-
-  return queue
-}
-
-log.info = function (value) {
-  queue = [...queue, `ℹ️ ${value}`]
-}
-
-log.warning = function (value) {
-  queue = [...queue, `⚠️ ${value}`]
-}
-
-log.success = function (value) {
-  queue = [...queue, `✅ ${value}`]
-}
-
-log.error = function (value) {
-  // throw new Error(`❌ ${value}`)
-  console.error(`❌ ${value}`)
-
-  return `❌ ${value}`
-}
-
-log.output = function () {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(queue.join('\n'))
+  static text(...value) {
+    this.queue.push(...value)
   }
-  return queue.join('\n')
-}
 
-log.clear = function () {
-  queue = []
+  static info(value) {
+    this.queue.push(`ℹ️ ${value}`)
+  }
+
+  static warning(value) {
+    this.queue.push(`⚠️ ${value}`)
+  }
+
+  static success(value) {
+    this.queue.push(`✅ ${value}`)
+  }
+
+  static error(value) {
+    // throw new Error(`❌ ${value}`)
+    console.error(`❌ ${value}`)
+
+    return `❌ ${value}`
+  }
+
+  static output() {
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(this.queue.join('\n'))
+    }
+    return this.queue.join('\n')
+  }
+
+  static clear() {
+    this.queue = []
+  }
 }
 
 function pipe(value, ...fns) {

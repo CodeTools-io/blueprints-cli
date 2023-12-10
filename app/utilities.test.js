@@ -98,9 +98,9 @@ describe('Utilities', () => {
 
     test('can log standard output', () => {
       log.clear()
-      log('first')
-      log('second')
-      log('third')
+      log.text('first')
+      log.text('second')
+      log.text('third')
       const result = log.output()
 
       expect(result).toMatchSnapshot()

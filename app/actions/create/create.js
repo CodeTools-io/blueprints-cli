@@ -1,6 +1,6 @@
 const createFromDirectory = require('./lib/createFromDirectory')
 const createBlank = require('./lib/createBlank')
-const log = require('../../utils/log')
+const { log } = require('../../utilities')
 
 module.exports = async function create(blueprintName, command) {
   try {
