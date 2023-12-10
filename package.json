@@ -14,7 +14,8 @@
   "scripts": {
     "postinstall": "mkdir -p ~/.blueprints",
     "test": "jest --silent",
-    "test:debug": "jest"
+    "test-watch": "jest --watch",
+    "test-debug": "jest"
   },
   "keywords": [
     "node",

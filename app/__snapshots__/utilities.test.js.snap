@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Utilities getMetadata can get metadata 1`] = `
+Object {
+  "blueprint": "Component",
+  "blueprintInstance": "Button",
+  "blueprintInstancePluralized": "Buttons",
+  "blueprintInstanceSingularized": "Button",
+  "blueprintInstance_CamelCaseFormat": "button",
+  "blueprintInstance_CamelCaseFormatPluralized": "buttons",
+  "blueprintInstance_CamelCaseFormatSingularized": "button",
+  "blueprintInstance_ClassFormat": "Button",
+  "blueprintInstance_ClassFormatPluralized": "Buttons",
+  "blueprintInstance_ClassFormatSingularized": "Button",
+  "blueprintInstance_ConstantFormat": "BUTTON",
+  "blueprintInstance_ConstantFormatPluralized": "BUTTONS",
+  "blueprintInstance_ConstantFormatSingularized": "BUTTON",
+  "blueprintInstance_DashedFormat": "button",
+  "blueprintInstance_DashedFormatPluralized": "buttons",
+  "blueprintInstance_DashedFormatSingularized": "button",
+  "blueprintInstance_PascalCaseFormat": "Button",
+  "blueprintInstance_PascalCaseFormatPluralized": "Buttons",
+  "blueprintInstance_PascalCaseFormatSingularized": "Button",
+  "blueprintInstance_SlugFormat": "button",
+  "blueprintInstance_SlugFormatPluralized": "buttons",
+  "blueprintInstance_SlugFormatSingularized": "button",
+  "blueprintInstance_camelCaseFormat": "button",
+  "blueprintInstance_camelCaseFormatPluralized": "buttons",
+  "blueprintInstance_camelCaseFormatSingularized": "button",
+  "blueprintInstance_dashed-format": "button",
+  "blueprintInstance_dashed-formatPluralized": "buttons",
+  "blueprintInstance_dashed-formatSingularized": "button",
+  "blueprintInstance_pascalCaseFormat": "Button",
+  "blueprintInstance_pascalCaseFormatPluralized": "Buttons",
+  "blueprintInstance_pascalCaseFormatSingularized": "Button",
+  "blueprintInstance_slug-format": "button",
+  "blueprintInstance_slug-formatPluralized": "buttons",
+  "blueprintInstance_slug-formatSingularized": "button",
+  "blueprintPluralized": "Components",
+  "blueprintSingularized": "Component",
+}
+`;
+
+exports[`Utilities log can log standard output 1`] = `
+"first
+second
+third"
+`;
+
+exports[`Utilities log can log warning output 1`] = `
+"⚠️ first warning
+⚠️ second warning
+⚠️ third warning"
+`;
