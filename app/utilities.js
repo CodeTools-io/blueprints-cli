@@ -3,6 +3,12 @@ const globby = require('globby')
 const inflection = require('inflection')
 const prop = require('dot-prop')
 
+/**
+ * Returns absolute paths for a given glob pattern.
+ * @param {string} glob - The glob pattern.
+ * @param {object} options - Options for globby.
+ * @returns {Promise<string[]>} A promise that resolves to an array of absolute file paths.
+ */
 function getAbsolutePaths(glob, options) {
   return globby(glob, options).then((results) => {
     const cwd = options.cwd ? options.cwd : process.cwd()
@@ -13,6 +19,11 @@ function getAbsolutePaths(glob, options) {
   })
 }
 
+/**
+ * Generates metadata for a given blueprint instance and blueprint.
+ * @param {object} param0 - Object containing blueprintInstance and blueprint.
+ * @returns {object} An object containing metadata information.
+ */
 function getMetadata({ blueprintInstance, blueprint }) {
   const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
   let data = {}
@@ -76,6 +87,11 @@ function getMetadata({ blueprintInstance, blueprint }) {
   }
 }
 
+/**
+ * Converts an array of key-value pairs to an object.
+ * @param {Array<Array<string>>} keyValueEntries - Array of key-value pairs.
+ * @returns {object} Object formed from key-value pairs.
+ */
 function getObject(keyValueEntries) {
   let result = {}
   keyValueEntries.forEach(([key, value]) => {
@@ -105,18 +121,36 @@ function getObject(keyValueEntries) {
   return result
 }
 
+/**
+ * Parses key-value pairs from an array.
+ * @param {string[]} keyValues - Array of key-value strings.
+ * @returns {Array<Array<string>>} An array of key-value pairs.
+ */
 function getParsedKeyValues(keyValues = []) {
   return keyValues.map((keyVal) => keyVal.split('=', 2))
 }
 
+/**
+ * Filters template arguments from an array of arguments.
+ * @param {string[]} argv - Array of arguments.
+ * @returns {string[]} An array of template arguments.
+ */
 function getTemplateArgs(argv = []) {
   return argv.filter((arg) => !arg.startsWith('--'))
 }
 
+/**
+ * Constructs template data from arguments.
+ * @param {string[]} args - Array of arguments.
+ * @returns {object} Object constructed from the template data.
+ */
 function getTemplateData(args) {
   return pipe(args, getTemplateArgs, getParsedKeyValues, getObject)
 }
 
+/**
+ * Logging class with various levels of logging.
+ */
 class log {
   static queue = []
 
@@ -155,10 +189,23 @@ class log {
   }
 }
 
+/**
+ * Applies a series of functions to a value.
+ * @param {*} value - The initial value.
+ * @param  {...Function} fns - Functions to apply.
+ * @returns {*} The result after applying the functions.
+ */
 function pipe(value, ...fns) {
   return fns.reduce((accum, fn) => fn(accum), value)
 }
 
+/**
+ * Sets a value in an object, potentially creating nested arrays.
+ * @param {object} data - The object to modify.
+ * @param {string} key - The key in the object.
+ * @param {*} value - The value to set.
+ * @returns {object} The modified object.
+ */
 function setValue(data, key, value) {
   const arrayRegex = /([\w\.]+)\[(\d)*\]/
   const keySections = key.match(arrayRegex)
