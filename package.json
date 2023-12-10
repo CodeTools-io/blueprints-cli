@@ -3,13 +3,13 @@
   "version": "1.16.1",
   "description": "A tool for generating predefined files and directories",
   "private": false,
-  "main": "./app/cli_new.js",
+  "main": "./app/cli.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/codetools-io/blueprints-cli"
   },
   "bin": {
-    "bp": "./app/cli_new.js"
+    "bp": "./app/cli.js"
   },
   "scripts": {
     "postinstall": "mkdir -p ~/.blueprints",
