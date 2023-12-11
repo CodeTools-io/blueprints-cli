@@ -10,7 +10,9 @@ async function run(userInput) {
 
   await app.parseAsync(['node', 'bp', ...args])
 
-  return app.commands.find((c) => c.name() === commandName)
+  const command = app.commands.find((c) => c.name() === commandName)
+  console.log(command)
+  return command
 }
 beforeEach(async () => {
   await fs.mkdirp('test_output')

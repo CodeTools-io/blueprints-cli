@@ -22,14 +22,16 @@ app
   .action(generate)
 
 app
-  .command('list [namespace]')
-  .alias('ls')
+  .command('list')
   .description('List all available blueprints')
+  .alias('ls')
+  .argument('[namespace]', 'namespace of the blueprints to show')
   .option('-l, --long', 'Shows more detail about the blueprints', false)
   .action(list)
 
 app
   .command('new')
+  .description('Create a blueprint')
   .argument('<blueprint>', 'name of blueprint to create')
   .option('-g, --global', 'Creates the blueprint globally', false)
   .option(
@@ -37,24 +39,27 @@ app
     'Path to use for initial blueprint files',
     false
   )
-  .description('Create a blueprint')
   .action(create)
 
 app
-  .command('import <globalBlueprint> [localBlueprint]')
+  .command('import')
   .description('Create a project blueprint based on a global blueprint')
+  .argument('<globalBlueprint>', 'name of the global blueprint to use')
+  .argument('<localBlueprint>', 'name of the project blueprint create')
   .action(_import)
 
 app
-  .command('init [projectPath]')
+  .command('init')
   .description('Initialize a local blueprints project')
+  .argument('[projectPath]', 'path where blueprints should be initialized')
   .action(initialize)
 
 app
-  .command('remove <blueprint>')
-  .alias('rm')
-  .option('-g, --global', 'Removes the global blueprint')
+  .command('remove')
   .description('Removes a blueprint')
+  .alias('rm')
+  .argument('<blueprint>', 'name of the blueprint to remove')
+  .option('-g, --global', 'Removes the global blueprint')
   .action(remove)
 
 app.on('--help', help)

@@ -2,14 +2,18 @@ import path from 'path'
 import fs from 'fs-extra'
 import { PROJECT_ROOT_PATH, GLOBAL_BLUEPRINTS_PATH } from '../../../config.mjs'
 const DEFAULT_SCRIPT = `
-export default function(data, libraries) {
+export default async function(data, libraries) {
   // fs docs: https://github.com/jprichardson/node-fs-extra
   // _ docs: https://lodash.com/docs
   // date docs: https://date-fns.org
 
-  const {_, fs, date, File} = libraries;
+  const {_, fs, date, File, log} = libraries;
 
   // ...code to execute
+
+  // must return Promise
+  const result = await Promise.resolve(true);
+  return result;
 }
 `
 
@@ -33,18 +37,18 @@ export default async function createBlank(blueprintName, options = {}) {
       path.resolve(blueprintPath, './files/__blueprintInstance__')
     )
     await fs.outputFile(
-      path.resolve(blueprintPath, './scripts/preGenerate.js'),
+      path.resolve(blueprintPath, './scripts/preGenerate.mjs'),
       DEFAULT_SCRIPT.trim()
     )
     await fs.outputFile(
-      path.resolve(blueprintPath, './scripts/postGenerate.js'),
+      path.resolve(blueprintPath, './scripts/postGenerate.mjs'),
       DEFAULT_SCRIPT.trim()
     )
     await fs.outputJson(
       path.resolve(blueprintPath, './blueprint.json'),
       {
-        preGenerate: ['scripts/preGenerate.js'],
-        postGenerate: ['scripts/postGenerate.js'],
+        preGenerate: ['scripts/preGenerate.mjs'],
+        postGenerate: ['scripts/postGenerate.mjs'],
       },
       { spaces: 2 }
     )

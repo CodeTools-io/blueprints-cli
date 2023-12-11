@@ -34,6 +34,8 @@ export default async function generate(
       location,
     })
 
+    await blueprint.loadConfigFile()
+
     function getBlueprintPath(name) {
       const globalBlueprintPath = path.resolve(
         GLOBAL_BLUEPRINTS_PATH,

@@ -6,14 +6,18 @@ import {
   GLOBAL_BLUEPRINTS_PATH,
 } from '../../../config.mjs'
 const DEFAULT_SCRIPT = `
-export default function(data, libraries) {
+export default async function(data, libraries) {
   // fs docs: https://github.com/jprichardson/node-fs-extra
   // _ docs: https://lodash.com/docs
   // date docs: https://date-fns.org
 
-  const {_, fs, date, File} = libraries;
+  const {_, fs, date, File, log} = libraries;
 
   // ...code to execute
+
+  // must return Promise
+  const result = await Promise.resolve(true);
+  return result;
 }
 `
 
@@ -41,8 +45,8 @@ export default async function createFromDirectory(blueprintName, command) {
     await fs.outputJson(
       path.resolve(location, './blueprint.json'),
       {
-        preGenerate: ['scripts/preGenerate.js'],
-        postGenerate: ['scripts/postGenerate.js'],
+        preGenerate: ['scripts/preGenerate.mjs'],
+        postGenerate: ['scripts/postGenerate.mjs'],
       },
       { spaces: 2 }
     )
