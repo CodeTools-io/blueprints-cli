@@ -35,18 +35,25 @@
     "prettier": "2.1.2"
   },
   "dependencies": {
+    "cli-table3": "^0.6.3",
     "commander": "^11.1.0",
     "date-fns": "^2.16.1",
     "dot-prop": "^5.3.0",
     "find-up": "^5.0.0",
     "fs-extra": "^11.2.0",
     "globby": "^11.0.2",
+    "hnswlib-node": "^1.4.2",
     "inflection": "^1.12.0",
+    "langchain": "^0.0.204",
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.21",
+    "openai": "^4.20.1",
     "pkg-dir": "^4.2.0",
     "pkg-up": "^3.1.0",
     "rc": "^1.2.6",
-    "scaffold-helper": "^1.2.0"
+    "scaffold-helper": "^1.2.0",
+    "treeify": "^1.1.0",
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
   }
 }

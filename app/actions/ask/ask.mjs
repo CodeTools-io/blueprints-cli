@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs-extra'
 import Blueprint from '../../lib/Blueprint/index.mjs'
 import { getMetadata, getTemplateData, log } from '../../utilities.mjs'
-
 import {
   CURRENT_PATH,
   PROJECT_BLUEPRINTS_PATH,
@@ -27,11 +26,7 @@ function getBlueprintPath(name) {
   return null
 }
 
-export default async function generate(
-  blueprintName,
-  blueprintInstance,
-  command
-) {
+export default async function ask(blueprintName, blueprintInstance, command) {
   try {
     log.clear()
     const destination = command?.dest || CURRENT_PATH
@@ -59,7 +54,7 @@ export default async function generate(
         ...data,
         ...metadata,
       },
-      ai: false,
+      ai: true,
     })
 
     this.output = log.output()

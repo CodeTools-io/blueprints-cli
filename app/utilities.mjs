@@ -2,6 +2,7 @@ import path from 'path'
 import globby from 'globby'
 import inflection from 'inflection'
 import prop from 'dot-prop'
+import treeify from 'treeify'
 
 /**
  * Returns absolute paths for a given glob pattern.
@@ -9,7 +10,7 @@ import prop from 'dot-prop'
  * @param {object} options - Options for globby.
  * @returns {Promise<string[]>} A promise that resolves to an array of absolute file paths.
  */
-export function getAbsolutePaths(glob, options) {
+export function getAbsolutePaths(glob, options = {}) {
   return globby(glob, options).then((results) => {
     const cwd = options.cwd ? options.cwd : process.cwd()
 
@@ -24,11 +25,12 @@ export function getAbsolutePaths(glob, options) {
  * @param {object} param0 - Object containing blueprintInstance and blueprint.
  * @returns {object} An object containing metadata information.
  */
-export function getMetadata({ blueprintInstance, blueprint }) {
+export function getMetadata({ blueprintInstance, blueprint, destination }) {
   const standardBlueprintInstance = blueprintInstance.replace(/-/gi, '_')
   let data = {}
   data['blueprint'] = blueprint
   data['blueprintInstance'] = blueprintInstance
+  data['blueprintInstanceDestination'] = destination
   data['blueprintInstance_ClassFormat'] = inflection.classify(
     standardBlueprintInstance
   )
@@ -156,6 +158,10 @@ export class log {
 
   static text(...value) {
     this.queue.push(...value)
+  }
+
+  static table(value) {
+    this.queue.push(treeify.asTree(value))
   }
 
   static info(value) {

@@ -12,3 +12,4 @@ export const GLOBAL_BLUEPRINTS_PATH = path.resolve(
   os.homedir(),
   './.blueprints'
 )
+export const CLI_PROMPTS_PATH = new URL('./prompts', import.meta.url).pathname

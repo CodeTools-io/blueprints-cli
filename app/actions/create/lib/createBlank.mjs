@@ -16,6 +16,13 @@ export default async function(data, libraries) {
   return result;
 }
 `
+const DEFAULT_PROMPT = `
+---
+input_variables: []
+partial_variables: []
+---
+You are a file generator. You will generate files using the provided template and data.
+`
 
 export default async function createBlank(blueprintName, options = {}) {
   let blueprintPath
@@ -36,6 +43,7 @@ export default async function createBlank(blueprintName, options = {}) {
     await fs.ensureDir(
       path.resolve(blueprintPath, './files/__blueprintInstance__')
     )
+    await fs.ensureDir(path.resolve(blueprintPath, './prompts/'))
     await fs.outputFile(
       path.resolve(blueprintPath, './scripts/preGenerate.mjs'),
       DEFAULT_SCRIPT.trim()
@@ -44,11 +52,16 @@ export default async function createBlank(blueprintName, options = {}) {
       path.resolve(blueprintPath, './scripts/postGenerate.mjs'),
       DEFAULT_SCRIPT.trim()
     )
+    await fs.outputFile(
+      path.resolve(blueprintPath, './prompts/default.md'),
+      DEFAULT_PROMPT.trim()
+    )
     await fs.outputJson(
       path.resolve(blueprintPath, './blueprint.json'),
       {
         preGenerate: ['scripts/preGenerate.mjs'],
         postGenerate: ['scripts/postGenerate.mjs'],
+        prompts: ['prompts/default.md'],
       },
       { spaces: 2 }
     )

@@ -7,33 +7,43 @@ import initialize from './actions/initialize/index.mjs'
 import list from './actions/list/index.mjs'
 import remove from './actions/remove/index.mjs'
 import help from './actions/help/index.mjs'
+import ask from './actions/ask/index.mjs'
 
 const app = new Command()
 
 app.name(pkg.name).description(pkg.description).version(pkg.version)
 
 app
-  .command('generate')
-  .description('Generate files with a blueprint')
+  .command('ask')
+  .description('generate files with the help of AI')
   .argument('<blueprint>', 'name of the blueprint to use')
   .argument('<blueprintInstance>', 'name of the blueprint instance to create')
-  .option('-d, --dest <destination>', 'Which directory to place the files')
+  .option('-m, --model <model>', 'AI model to use', 'gpt-4-1106-preview')
+  .alias('a')
+  .action(ask)
+
+app
+  .command('generate')
+  .description('generate files with a blueprint')
+  .argument('<blueprint>', 'name of the blueprint to use')
+  .argument('<blueprintInstance>', 'name of the blueprint instance to create')
+  .option('-d, --dest <destination>', 'which directory to place the files')
   .alias('g')
   .action(generate)
 
 app
   .command('list')
-  .description('List all available blueprints')
+  .description('list all available blueprints')
   .alias('ls')
   .argument('[namespace]', 'namespace of the blueprints to show')
-  .option('-l, --long', 'Shows more detail about the blueprints', false)
+  .option('-l, --long', 'shows more detail about the blueprints', false)
   .action(list)
 
 app
   .command('new')
-  .description('Create a blueprint')
+  .description('create a blueprint')
   .argument('<blueprint>', 'name of blueprint to create')
-  .option('-g, --global', 'Creates the blueprint globally', false)
+  .option('-g, --global', 'creates the blueprint globally', false)
   .option(
     '-s, --source [sourcePath]',
     'Path to use for initial blueprint files',
@@ -43,20 +53,20 @@ app
 
 app
   .command('import')
-  .description('Create a project blueprint based on a global blueprint')
+  .description('create a project blueprint based on a global blueprint')
   .argument('<globalBlueprint>', 'name of the global blueprint to use')
   .argument('<localBlueprint>', 'name of the project blueprint create')
   .action(_import)
 
 app
   .command('init')
-  .description('Initialize a local blueprints project')
+  .description('initialize a local blueprints project')
   .argument('[projectPath]', 'path where blueprints should be initialized')
   .action(initialize)
 
 app
   .command('remove')
-  .description('Removes a blueprint')
+  .description('removes a blueprint')
   .alias('rm')
   .argument('<blueprint>', 'name of the blueprint to remove')
   .option('-g, --global', 'Removes the global blueprint')
