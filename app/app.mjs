@@ -15,7 +15,7 @@ app.name(pkg.name).description(pkg.description).version(pkg.version)
 
 app
   .command('ask')
-  .description('generate files with the help of AI')
+  .description('generate files with a blueprint processed by AI')
   .argument('<blueprint>', 'name of the blueprint to use')
   .argument('<blueprintInstance>', 'name of the blueprint instance to create')
   .option('-d, --dest <destination>', 'which directory to place the files')
