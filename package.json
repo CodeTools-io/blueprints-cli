@@ -41,7 +41,7 @@
     "dot-prop": "^5.3.0",
     "find-up": "^5.0.0",
     "fs-extra": "^11.2.0",
-    "globby": "^11.0.2",
+    "globby": "^14.0.0",
     "hnswlib-node": "^1.4.2",
     "inflection": "^3.0.0",
     "langchain": "^0.0.204",

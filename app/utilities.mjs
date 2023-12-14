@@ -1,5 +1,5 @@
 import path from 'path'
-import globby from 'globby'
+import { globby } from 'globby'
 import inflection from 'inflection'
 import prop from 'dot-prop'
 import treeify from 'treeify'
