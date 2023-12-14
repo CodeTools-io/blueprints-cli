@@ -1,7 +1,7 @@
 import path from 'path'
 import { globby } from 'globby'
 import inflection from 'inflection'
-import prop from 'dot-prop'
+import * as prop from 'dot-prop'
 import treeify from 'treeify'
 
 /**
@@ -89,20 +89,20 @@ export function getObject(keyValueEntries) {
       const index = Number.parseInt(keySections[2])
       const keyName = keySections[1]
 
-      if (!prop.has(result, keyName)) {
-        prop.set(result, keyName, [])
+      if (!prop.hasProperty(result, keyName)) {
+        prop.setProperty(result, keyName, [])
       }
 
-      const currentVal = prop.get(result, keyName)
+      const currentVal = prop.getProperty(result, keyName)
 
       if (Number.isInteger(index)) {
         currentVal[index] = value
       } else {
         currentVal.push(value)
       }
-      prop.set(result, keyName, currentVal)
+      prop.setProperty(result, keyName, currentVal)
     } else {
-      prop.set(result, key, value)
+      prop.setProperty(result, key, value)
     }
   })
   return result
@@ -204,20 +204,20 @@ export function setValue(data, key, value) {
     const index = Number.parseInt(keySections[2])
     const keyName = keySections[1]
 
-    if (!prop.has(data, keyName)) {
-      prop.set(data, keyName, [])
+    if (!prop.hasProperty(data, keyName)) {
+      prop.setProperty(data, keyName, [])
     }
 
-    const currentVal = prop.get(data, keyName)
+    const currentVal = prop.getProperty(data, keyName)
 
     if (Number.isInteger(index)) {
       currentVal[index] = value
     } else {
       currentVal.push(value)
     }
-    prop.set(data, keyName, currentVal)
+    prop.setProperty(data, keyName, currentVal)
   } else {
-    prop.set(data, key, value)
+    prop.setProperty(data, key, value)
   }
   return data
 }
