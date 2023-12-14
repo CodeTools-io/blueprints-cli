@@ -35,45 +35,30 @@ export function getMetadata({ blueprintInstance, blueprint, destination }) {
     standardBlueprintInstance
   )
   data[
-    'blueprintInstance_dashed-format'
-  ] = inflection
-    .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
-    .toLowerCase()
-  data[
     'blueprintInstance_DashedFormat'
   ] = inflection
     .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
     .toLowerCase()
-  data['blueprintInstance_slug-format'] =
-    data['blueprintInstance_dashed-format']
-  data['blueprintInstance_SlugFormat'] = data['blueprintInstance_dashed-format']
-  data['blueprintInstance_camelCaseFormat'] = inflection.camelize(
-    standardBlueprintInstance,
-    true
-  )
+  data['blueprintInstance_SlugFormat'] = data['blueprintInstance_DashedFormat']
   data['blueprintInstance_CamelCaseFormat'] = inflection.camelize(
     standardBlueprintInstance,
     true
   )
-  data['blueprintInstance_pascalCaseFormat'] = inflection.camelize(
-    standardBlueprintInstance
-  )
   data['blueprintInstance_PascalCaseFormat'] = inflection.camelize(
-    standardBlueprintInstance
+    standardBlueprintInstance,
+    false
   )
-  data['blueprintInstance_ConstantFormat'] = inflection
-    .underscore(standardBlueprintInstance)
-    .toUpperCase()
+  data['blueprintInstance_ConstantFormat'] = inflection.underscore(
+    standardBlueprintInstance,
+    true
+  )
+  data['blueprintInstance_SnakeCaseFormat'] = inflection.underscore(
+    standardBlueprintInstance,
+    true
+  )
 
   const singlePluralVersions = Object.entries(data).reduce(
     (accum, [key, value]) => {
-      if (key === 'blueprintInstance_ConstantFormat') {
-        return {
-          ...accum,
-          [`${key}Pluralized`]: inflection.pluralize(value).toUpperCase(),
-          [`${key}Singularized`]: inflection.singularize(value).toUpperCase(),
-        }
-      }
       return {
         ...accum,
         [`${key}Pluralized`]: inflection.pluralize(value),
