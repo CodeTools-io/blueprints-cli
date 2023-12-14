@@ -18,6 +18,7 @@ app
   .description('generate files with the help of AI')
   .argument('<blueprint>', 'name of the blueprint to use')
   .argument('<blueprintInstance>', 'name of the blueprint instance to create')
+  .option('-d, --dest <destination>', 'which directory to place the files')
   .option('-m, --model <model>', 'AI model to use', 'gpt-4-1106-preview')
   .alias('a')
   .action(ask)
