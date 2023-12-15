@@ -3,6 +3,7 @@ import { globby } from 'globby'
 import inflection from 'inflection'
 import * as prop from 'dot-prop'
 import treeify from 'treeify'
+import fs from 'fs-extra'
 
 /**
  * Returns absolute paths for a given glob pattern.
@@ -214,4 +215,99 @@ export function setValue(data, key, value) {
     prop.setProperty(data, key, value)
   }
   return data
+}
+
+/**
+ * Gets the rendered output of a template
+ * @param {String} template - A template to use as a base for the render
+ * @param {Object} data - The data to use when populating the templates
+ * @param {RegExp} matcher - The regex to use for indentifying template variables
+ */
+export function getRenderedValue(template, data, matcher) {
+  return template.replace(matcher, (match, captured) => {
+    const replacement = prop.getProperty(data, captured.trim())
+    // If a template variable is found but nothing is supplied to fill it, remove it
+    if (replacement == null) {
+      return ''
+    }
+
+    // If the replacement is a function, replace the variable with the result of the function
+    if (typeof replacement === 'function') {
+      return replacement()
+    }
+
+    // otherwise replace the template variable with the associated data
+    return replacement
+  })
+}
+
+/**
+ * Creates file resources based on another file resource
+ *
+ * @param {Object} props
+ * @param {String} props.source - The path to the source files
+ * @param {String} props.destination - The base path of the generated files
+ * @param {Boolean} props.onlyFiles - Whether to only generate files
+ * @param {Array} props.exclude - The paths to exclude from generated files
+ * @param {RegExp} props.contentRegex - The pattern for indentifying template variables in the content
+ * @param {RegExp} props.fileNameRegex - The pattern for indentifying template variables in the file names
+ * @param {Object} props.data - The data to pass to the templates when generating
+ */
+export async function scaffold(props = {}) {
+  const defaultProps = {
+    source: '',
+    destination: 'destination',
+    contentRegex: /\{\{\s?([A-Za-z0-9_-]+_?[A-Za-z0-9-]+)+\s?\}\}/g,
+    fileNameRegex: /__([A-Za-z0-9_-]+_?[A-Za-z0-9-]+)+__/g,
+    data: {},
+  }
+  const { source, destination, contentRegex, fileNameRegex, data } = { ...defaultProps, ...props }
+  const cwd = process.cwd()
+
+  const thisSource = path.isAbsolute(source) ? source : path.join(cwd, source)
+  const thisDestination = path.isAbsolute(destination) ? destination : path.join(cwd, destination)
+
+  try {
+    // get all file paths in the blueprint
+    const allFiles = await globby(path.posix.join(thisSource, './**/*'), {
+      onlyFiles: true,
+      unique: false,
+      dot: true,
+    })
+    // get all directory paths in the blueprint
+    const allDirs = await globby(path.posix.join(thisSource, './**/*'), {
+      onlyDirectories: true,
+      unique: false,
+      dot: true,
+    })
+    // load the templates
+    const allTemplates = await Promise.all(allFiles.map((file) => fs.readFile(file, 'utf-8')))
+    // generate all directories
+    const allGeneratedDirs = await Promise.all(
+      allDirs.map((dir) => {
+        const destinationPath = dir.replace(thisSource, thisDestination)
+        const renderedPath = getRenderedValue(destinationPath, data, fileNameRegex)
+        return fs.ensureDir(renderedPath)
+      })
+    )
+    // generate files
+    const allGeneratedFiles = await Promise.all(
+      allTemplates.map((template, index) => {
+        const destinationPath = allFiles[index].replace(thisSource, thisDestination)
+        const renderedPath = getRenderedValue(destinationPath, data, fileNameRegex)
+        const renderedContent = getRenderedValue(template, data, contentRegex)
+
+        return fs.writeFile(renderedPath, renderedContent)
+      })
+    )
+
+    return {
+      destination: thisDestination,
+      files: allFiles,
+      dirs: allDirs,
+      templates: allTemplates,
+    }
+  } catch (e) {
+    throw new Error(e)
+  }
 }

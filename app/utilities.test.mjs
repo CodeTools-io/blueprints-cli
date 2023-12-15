@@ -2,11 +2,13 @@ import {
   getAbsolutePaths,
   getMetadata,
   getObject,
+  getRenderedValue,
   getParsedKeyValues,
   getTemplateArgs,
   getTemplateData,
   log,
   pipe,
+  scaffold,
   setValue,
 } from './utilities.mjs'
 import path from 'path'
@@ -183,6 +185,33 @@ describe('Utilities', () => {
           },
         }
       `)
+    })
+  })
+
+  describe('getRenderedValue', () => {
+    test('can use static data types', () => {
+      const template = 'This is a test called [name]. It will have a status of [status]. The [name] will result in a [outcome].'
+      const data = {name: 'example test', status: "success", outcome: "passing test"}
+      const matcherRegex = /\[(\w+)\]/g
+      const result = getRenderedValue(template, data, matcherRegex)
+
+      expect(result).toEqual('This is a test called example test. It will have a status of success. The example test will result in a passing test.')
+    })
+    test('can use function data types', () => {
+      const template = 'This is a test called [name]. It will have a status of [status]. The [name] will result in a [outcome].'
+      const data = {name: () => 'example test with functions', status: "success", outcome: "passing test"}
+      const matcherRegex = /\[(\w+)\]/g
+      const result = getRenderedValue(template, data, matcherRegex)
+
+      expect(result).toEqual('This is a test called example test with functions. It will have a status of success. The example test with functions will result in a passing test.')
+    })
+    test('can remove unused template variables', () => {
+      const template = 'This is a test called [name]'
+      const data = {}
+      const matcherRegex = /\[(\w+)\]/g
+      const result = getRenderedValue(template, data, matcherRegex)
+
+      expect(result).toEqual('This is a test called ')
     })
   })
 })

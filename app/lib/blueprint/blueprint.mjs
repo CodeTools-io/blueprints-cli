@@ -1,6 +1,5 @@
 import path from 'path'
 import fs from 'fs-extra'
-import scaffoldHelper from 'scaffold-helper'
 import { PromptTemplate, PipelinePromptTemplate } from 'langchain/prompts'
 import { ChatOpenAI } from 'langchain/chat_models/openai'
 import { LLMChain } from 'langchain/chains'
@@ -11,8 +10,7 @@ import date from 'date-fns'
 import { parse } from 'yaml'
 const { merge } = _
 import File from '../../lib/File/index.mjs'
-import { getAbsolutePaths, log } from '../../utilities.mjs'
-const scaffold = scaffoldHelper.default
+import { getAbsolutePaths, log, scaffold } from '../../utilities.mjs'
 
 class Blueprint {
   constructor({ name, location, source }) {
@@ -96,30 +94,25 @@ class Blueprint {
       })
   }
 
-  create(options) {
+  async create(options) {
     if (!this.source) {
       throw new Error('No source specified')
     }
     if (!this.location) {
       throw new Error('No location specified')
     }
-    return fs
-      .ensureDir(this.location)
-      .then(() => {
-        scaffold(
-          {
-            source: this.source,
-            destination: this.filesPath,
-            onlyFiles: false,
-          },
-          {}
-        )
-
-        return this
+    try {
+      await fs.ensureDir(this.location)
+      const result = await scaffold({
+        source: this.source,
+        destination: this.filesPath,
+        onlyFiles: false,
+        data: {},
       })
-      .catch((err) => {
-        throw err
-      })
+      return result
+    } catch (err) {
+      throw err
+    }
   }
 
   async executeHook({ name, destination, data = {} }) {
@@ -169,6 +162,7 @@ class Blueprint {
 
   async generate({ destination, data = {}, ai = false }) {
     const generateFn = ai ? 'generateWithAI' : 'generateWithScaffold'
+
     await this.loadConfigFile()
     await this.loadFilesContent()
     await this.preGenerate({ destination, data })
@@ -189,7 +183,7 @@ class Blueprint {
 
       await fs.ensureDir(destination)
 
-      scaffold({ source: this.filesPath, destination, onlyFiles: false }, mergedData)
+      scaffold({ source: this.filesPath, destination, onlyFiles: false, data: mergedData })
 
       log.success(`generated instance`)
 
