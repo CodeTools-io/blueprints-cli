@@ -10,6 +10,10 @@ import {
   setValue,
 } from './utilities.mjs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+import { jest } from '@jest/globals'
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 describe('Utilities', () => {
   describe('getAbsolutePaths', () => {
@@ -27,6 +31,7 @@ describe('Utilities', () => {
       const result = getMetadata({
         blueprint: 'Component',
         blueprintInstance: 'Button',
+        destination: 'someLocation'
       })
 
       expect(result).toMatchSnapshot()

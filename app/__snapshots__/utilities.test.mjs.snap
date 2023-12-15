@@ -4,6 +4,7 @@ exports[`Utilities getMetadata can get metadata 1`] = `
 {
   "blueprint": "Component",
   "blueprintInstance": "Button",
+  "blueprintInstanceDestination": "someLocation",
   "blueprintInstancePluralized": "Buttons",
   "blueprintInstanceSingularized": "Button",
   "blueprintInstance_CamelCaseFormat": "button",
@@ -12,7 +13,7 @@ exports[`Utilities getMetadata can get metadata 1`] = `
   "blueprintInstance_ClassFormat": "Button",
   "blueprintInstance_ClassFormatPluralized": "Buttons",
   "blueprintInstance_ClassFormatSingularized": "Button",
-  "blueprintInstance_ConstantFormat": "BUTTON",
+  "blueprintInstance_ConstantFormat": "button",
   "blueprintInstance_ConstantFormatPluralized": "BUTTONS",
   "blueprintInstance_ConstantFormatSingularized": "BUTTON",
   "blueprintInstance_DashedFormat": "button",
@@ -24,19 +25,22 @@ exports[`Utilities getMetadata can get metadata 1`] = `
   "blueprintInstance_SlugFormat": "button",
   "blueprintInstance_SlugFormatPluralized": "buttons",
   "blueprintInstance_SlugFormatSingularized": "button",
-  "blueprintInstance_camelCaseFormat": "button",
-  "blueprintInstance_camelCaseFormatPluralized": "buttons",
-  "blueprintInstance_camelCaseFormatSingularized": "button",
-  "blueprintInstance_dashed-format": "button",
-  "blueprintInstance_dashed-formatPluralized": "buttons",
-  "blueprintInstance_dashed-formatSingularized": "button",
-  "blueprintInstance_pascalCaseFormat": "Button",
-  "blueprintInstance_pascalCaseFormatPluralized": "Buttons",
-  "blueprintInstance_pascalCaseFormatSingularized": "Button",
-  "blueprintInstance_slug-format": "button",
-  "blueprintInstance_slug-formatPluralized": "buttons",
-  "blueprintInstance_slug-formatSingularized": "button",
+  "blueprintInstance_SnakeCaseFormat": "button",
+  "blueprintInstance_SnakeCaseFormatPluralized": "buttons",
+  "blueprintInstance_SnakeCaseFormatSingularized": "button",
   "blueprintPluralized": "Components",
   "blueprintSingularized": "Component",
 }
+`;
+
+exports[`Utilities log can log standard output 1`] = `
+"first
+second
+third"
+`;
+
+exports[`Utilities log can log warning output 1`] = `
+"⚠️ first warning
+⚠️ second warning
+⚠️ third warning"
 `;

@@ -31,42 +31,36 @@ export function getMetadata({ blueprintInstance, blueprint, destination }) {
   data['blueprint'] = blueprint
   data['blueprintInstance'] = blueprintInstance
   data['blueprintInstanceDestination'] = destination
-  data['blueprintInstance_ClassFormat'] = inflection.classify(
-    standardBlueprintInstance
-  )
-  data[
-    'blueprintInstance_DashedFormat'
-  ] = inflection
+  data['blueprintInstance_ClassFormat'] = inflection.classify(standardBlueprintInstance)
+  data['blueprintInstance_DashedFormat'] = inflection
     .transform(standardBlueprintInstance, ['underscore', 'dasherize'])
     .toLowerCase()
   data['blueprintInstance_SlugFormat'] = data['blueprintInstance_DashedFormat']
-  data['blueprintInstance_CamelCaseFormat'] = inflection.camelize(
-    standardBlueprintInstance,
-    true
-  )
-  data['blueprintInstance_PascalCaseFormat'] = inflection.camelize(
-    standardBlueprintInstance,
-    false
-  )
-  data['blueprintInstance_ConstantFormat'] = inflection.underscore(
-    standardBlueprintInstance,
-    true
-  )
-  data['blueprintInstance_SnakeCaseFormat'] = inflection.underscore(
-    standardBlueprintInstance,
-    true
-  )
+  data['blueprintInstance_CamelCaseFormat'] = inflection.camelize(standardBlueprintInstance, true)
+  data['blueprintInstance_PascalCaseFormat'] = inflection.camelize(standardBlueprintInstance, false)
+  data['blueprintInstance_ConstantFormat'] = inflection.underscore(standardBlueprintInstance, true)
+  data['blueprintInstance_SnakeCaseFormat'] = inflection.underscore(standardBlueprintInstance, true)
 
-  const singlePluralVersions = Object.entries(data).reduce(
-    (accum, [key, value]) => {
+  const singlePluralVersions = Object.entries(data)
+    .filter(([key, value]) => {
+      return key !== 'blueprintInstanceDestination'
+    })
+    .reduce((accum, [key, value]) => {
+      const pluralizedText =
+        key === 'blueprintInstance_ConstantFormat'
+          ? inflection.pluralize(value).toUpperCase()
+          : inflection.pluralize(value)
+      const singularizedText =
+        key === 'blueprintInstance_ConstantFormat'
+          ? inflection.singularize(value).toUpperCase()
+          : inflection.singularize(value)
+
       return {
         ...accum,
-        [`${key}Pluralized`]: inflection.pluralize(value),
-        [`${key}Singularized`]: inflection.singularize(value),
+        [`${key}Pluralized`]: pluralizedText,
+        [`${key}Singularized`]: singularizedText,
       }
-    },
-    {}
-  )
+    }, {})
 
   return {
     ...data,

@@ -11,7 +11,7 @@ async function run(userInput) {
   await app.parseAsync(['node', 'bp', ...args])
 
   const command = app.commands.find((c) => c.name() === commandName)
-  console.log(command)
+  
   return command
 }
 beforeEach(async () => {
