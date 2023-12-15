@@ -1,6 +1,9 @@
 import fs from 'fs-extra'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import File from './File.mjs'
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 describe('File', () => {
   test('can be initialized', () => {
