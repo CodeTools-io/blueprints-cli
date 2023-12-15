@@ -68,7 +68,7 @@ describe('app', () => {
       const { output } = await run('generate mockA mockAInstance')
 
       expect(output).toContain(`✅ executed preGenerate hook`)
-      expect(output).toContain(`✅ created instance`)
+      expect(output).toContain(`✅ generated instance`)
       expect(output).toContain(`✅ executed postGenerate hook`)
     })
 

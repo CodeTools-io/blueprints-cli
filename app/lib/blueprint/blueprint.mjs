@@ -4,10 +4,7 @@ import scaffoldHelper from 'scaffold-helper'
 import { PromptTemplate, PipelinePromptTemplate } from 'langchain/prompts'
 import { ChatOpenAI } from 'langchain/chat_models/openai'
 import { LLMChain } from 'langchain/chains'
-import {
-  OutputFixingParser,
-  StructuredOutputParser,
-} from 'langchain/output_parsers'
+import { OutputFixingParser, StructuredOutputParser } from 'langchain/output_parsers'
 import { z } from 'zod'
 import _ from 'lodash'
 import date from 'date-fns'
@@ -132,10 +129,7 @@ class Blueprint {
       command = command.replace('<blueprintName>', mergedData.blueprint)
       command = command.replace('<blueprintPath>', this.location)
       command = command.replace('<instanceName>', mergedData.blueprintInstance)
-      command = command.replace(
-        '<instancePath>',
-        path.resolve(destination, mergedData.blueprintInstance)
-      )
+      command = command.replace('<instancePath>', path.resolve(destination, mergedData.blueprintInstance))
       return command
     })
     const hookModules = await Promise.allSettled(
@@ -195,10 +189,7 @@ class Blueprint {
 
       await fs.ensureDir(destination)
 
-      scaffold(
-        { source: this.filesPath, destination, onlyFiles: false },
-        mergedData
-      )
+      scaffold({ source: this.filesPath, destination, onlyFiles: false }, mergedData)
 
       log.success(`generated instance`)
 
@@ -226,24 +217,17 @@ class Blueprint {
     }
 
     const ResponseFormat = z.object({
-      destination: z
-        .string()
-        .describe('base location for where files will be created'),
+      destination: z.string().describe('base location for where files will be created'),
       files: z
         .object({
-          path: z
-            .string()
-            .describe('location of the file relative to the destination'),
+          path: z.string().describe('location of the file relative to the destination'),
           content: z.string().describe('content of the file'),
         })
         .array()
         .describe('files to be created'),
     })
     const parser = StructuredOutputParser.fromZodSchema(ResponseFormat)
-    const fixParser = OutputFixingParser.fromLLM(
-      new ChatOpenAI({ ...modelProps }),
-      parser
-    )
+    const fixParser = OutputFixingParser.fromLLM(new ChatOpenAI({ ...modelProps }), parser)
     try {
       const model = new ChatOpenAI({ ...modelProps })
       const formatInstructions = parser.getFormatInstructions()
@@ -264,11 +248,9 @@ class Blueprint {
         pipelinePrompts,
         finalPrompt,
       })
-      const templates = Object.entries(this.filesContent).map(
-        ([fileName, fileContent]) => {
-          return `template_name: ${fileName}\n\ntemplate_content:\n${fileContent}\n\n`
-        }
-      )
+      const templates = Object.entries(this.filesContent).map(([fileName, fileContent]) => {
+        return `template_name: ${fileName}\n\ntemplate_content:\n${fileContent}\n\n`
+      })
       const chain = new LLMChain({
         llm: model,
         prompt: composedPrompt,
@@ -281,9 +263,7 @@ class Blueprint {
       })
 
       const files = result.text.files
-      await Promise.all(
-        files.map((file) => fs.outputFile(file.path, file.content))
-      )
+      await Promise.all(files.map((file) => fs.outputFile(file.path, file.content)))
 
       log.success(`generated instance with AI (attempt 1)`)
 
@@ -293,9 +273,7 @@ class Blueprint {
 
       const files = result.files
 
-      await Promise.all(
-        files.map((file) => fs.outputFile(file.path, file.content))
-      )
+      await Promise.all(files.map((file) => fs.outputFile(file.path, file.content)))
 
       log.success(`generated instance with AI (attempt 2)`)
 

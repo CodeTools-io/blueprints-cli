@@ -1,4 +1,7 @@
 {
   "preGenerate": ["scripts/preGenerate.mjs"],
-  "postGenerate": ["scripts/postGenerate.mjs"]
+  "postGenerate": ["scripts/postGenerate.mjs"],
+  "prompts": [
+    "prompts/default.md"
+  ]
 }
